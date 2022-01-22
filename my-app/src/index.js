@@ -2,12 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import LobbyScreen from './lobby/LobbyScreen'
-import Gameplay from './gameplay/Gameplay'
+import Gameplay from './gameplay/GameplayScreen'
+import Trolling from './trolling/TrollingScreen'
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Gameplay/>
+    <Trolling/>
   </React.StrictMode>,
   document.getElementById('root')
 );

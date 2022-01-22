@@ -1,12 +1,12 @@
-import './Gameplay.css';
+import './GameplayScreen.css';
 
 // View
-function Gameplay () {
+function GameplayScreen () {
     // todo: avatars carried over? colors?
     const player_names = ['jax', 'daxter','ratchet','clank']
 
     // todo: rename?
-    const phrase = 'Early bird gets the worm'
+    const phrase = 'Slow and steady wins the race'
 
     let player_cards = ['Swap', 'Invert', 'Troll', 'Subvert']
     // todo: timer, add message to wait for troll phase
@@ -84,4 +84,4 @@ function PlayerCard (props) {
       )
 }
 
-export default Gameplay;
+export default GameplayScreen;
