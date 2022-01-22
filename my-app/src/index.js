@@ -10,7 +10,7 @@ import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <section className='container'>
+    <section className='game-container'>
       <LobbyScreen/>
     </section>
   </React.StrictMode>,

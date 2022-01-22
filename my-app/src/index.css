@@ -11,3 +11,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.game-container {
+  padding: 32px;
+}
+
+button, input[type='button'] {
+  -webkit-appearance: none;
+  border-radius: 4px;
+  background-color: blue;
+  color: white;
+  padding: 8px 16px;
+  border: 0;
+}
+
+button:hover, input[type='button']:hover {
+  background-color: darkslategrey;
+  cursor: pointer;
+}
+
+button:active, input[type='button']:active {
+  background-color: darkblue;
+  cursor: pointer;
+}
