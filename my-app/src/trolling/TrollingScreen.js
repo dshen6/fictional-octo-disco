@@ -10,7 +10,7 @@ function TrollingScreen () {
         'Joe the steadiest wins and Loses',
         'Glow Relapse and and Face'
     ]
-    // todo: timer, add message to wait for troll phase
+    // todo: walkthrough of cards applied
 
     return (
         <section> 

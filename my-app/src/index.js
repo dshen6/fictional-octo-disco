@@ -2,13 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import LobbyScreen from './lobby/LobbyScreen'
-import Gameplay from './gameplay/GameplayScreen'
-import Trolling from './trolling/TrollingScreen'
+import GameplayScreen from './gameplay/GameplayScreen'
+import TrollingScreen from './trolling/TrollingScreen'
+import VotingScreen from './voting/VotingScreen'
+import SummaryScreen from './summary/SummaryScreen'
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Trolling/>
+    <VotingScreen/>
   </React.StrictMode>,
   document.getElementById('root')
 );
