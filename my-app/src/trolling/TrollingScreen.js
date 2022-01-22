@@ -3,7 +3,6 @@ import './TrollingScreen.css';
 // View
 function TrollingScreen () {
     // todo: avatars carried over? colors?
-    const player_names = ['jax', 'daxter','ratchet','clank']
     let player_phrases = [
         'face bready slow wonders the slow',
         'Salty and unsteady wounds the face',
