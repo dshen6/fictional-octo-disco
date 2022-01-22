@@ -14,6 +14,7 @@ function LobbyScreen() {
 }
 
 function PlayerIconRow(props) {
+  // Map function: For name in player names, spit it out into player icon
   const player_icons = props.player_names.map(name => <PlayerIcon player_name={name} key={name}/>)
   return (
     <div className='player-icon-row'>

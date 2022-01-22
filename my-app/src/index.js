@@ -2,11 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import LobbyScreen from './lobby/LobbyScreen'
+import Gameplay from './gameplay/Gameplay'
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <LobbyScreen/>
+    <Gameplay/>
   </React.StrictMode>,
   document.getElementById('root')
 );
