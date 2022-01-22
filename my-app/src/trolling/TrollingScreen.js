@@ -12,7 +12,7 @@ function TrollingScreen () {
     // todo: walkthrough of cards applied
 
     return (
-        <section> 
+        <section className='trolling-container'> 
             <PlayerPhraseList player_phrases={player_phrases}/>
         </section>
     )

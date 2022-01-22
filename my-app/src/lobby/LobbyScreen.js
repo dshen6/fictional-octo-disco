@@ -3,13 +3,13 @@ import './LobbyScreen.css';
 function LobbyScreen() {
   const player_names = ['jax', 'daxter','ratchet','clank']
   return (
-    <div>
+    <section className='lobby-container'>
       <PlayerIconRow player_names={player_names}/>
       <ReadyText ready_player_count='4'/>
       <ReadyButton />
       <NameInput />
       <NameInputEnter />
-    </div>
+    </section>
   )
 }
 

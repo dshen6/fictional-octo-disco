@@ -12,7 +12,7 @@ function GameplayScreen () {
     // todo: timer, add message to wait for troll phase
 
     return (
-        <section> 
+        <section className='gameplay-container'> 
             Your phrase:
             <WordCardRow phrase={phrase}/>
 

@@ -10,7 +10,7 @@ function VotingScreen () {
     ]
 
     return (
-        <section>
+        <section className='voting-container'>
             <h1>Vote on your favorite phrase:</h1>
             <PlayerPhraseList player_phrases={player_phrases}/>
         </section>

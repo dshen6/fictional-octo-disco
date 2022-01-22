@@ -10,7 +10,9 @@ import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <SummaryScreen/>
+    <section className='container'>
+      <LobbyScreen/>
+    </section>
   </React.StrictMode>,
   document.getElementById('root')
 );
