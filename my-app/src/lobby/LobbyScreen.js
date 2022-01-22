@@ -26,20 +26,16 @@ function PlayerIconRow(props) {
 
 function PlayerIcon(props) {
   return(
-    <li>
-        <span>👍 </span>
-        <span className='ready-text'>
-          <h2>{props.player_name}</h2>
-        </span>
+    <li class='player-list-item'>
+        <div className='player-ready-icon'>👍</div>
+        <h2 className='player-text'>{props.player_name}</h2>
     </li>
   );
 }
 
 function ReadyText(props) {
   return (
-      <span className='ready-text'>
-        <h3>{props.ready_player_count}/{props.player_limit} Ready</h3>
-      </span>
+      <h3 className='ready-text'>{props.ready_player_count}/{props.player_limit} Ready</h3>
   );
 }
 
@@ -53,18 +49,16 @@ function ReadyButton() {
 
 function NameInput() {
   return (
-    <section className='player-name-form'>
+    <form className='player-name-form form-horizontal-layout'>
       <input type='text' placeholder='Enter name'/>
       <NameInputEnter />
-    </section>
+    </form>
   )
 }
   
 function NameInputEnter() {
   return (
-    <div>
-      <button>Ready</button>
-    </div>
+    <button>Ready</button>
   )
 }
 
