@@ -1,13 +1,9 @@
-.player-list {
-}
-
 .ready-btn {
     text-align: center;
 }
 
 .lobby-container {
     text-align: center;
-    max-width: 720px;
 }
 
 .player-name-form {
@@ -17,3 +13,15 @@
 .player-name-form input[type='text'] {
     width: 100%;
 }
+
+@media screen and (min-width: 760px) {
+    .player-list.list-horizontal {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+  
+  @media screen and (max-width: 759px) {
+    .player-list.list-horizontal {
+        grid-template-columns: 1fr 1fr;
+    }
+  }

@@ -4,7 +4,7 @@ function LobbyScreen() {
   const player_names = ['jax', 'daxter','ratchet','clank']
   const player_limit = 4
   return (
-    <section className='lobby-container'>
+    <section className='lobby-container game-page-container'>
       <h1>Join the game!</h1>
       <PlayerIconRow player_names={player_names}/>
       <ReadyText ready_player_count='4' player_limit={player_limit}/>

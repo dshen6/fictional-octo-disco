@@ -10,7 +10,7 @@ function VotingScreen () {
     ]
 
     return (
-        <section className='voting-container'>
+        <section className='voting-container game-page-container'>
             <h1>Vote on your favorite phrase:</h1>
             <PlayerPhraseList player_phrases={player_phrases}/>
         </section>
@@ -21,19 +21,18 @@ function VotingScreen () {
 function PlayerPhraseList (props) {
     const player_phrase_list = props.player_phrases.map(player_phrase => <PlayerPhrase player_phrase={player_phrase} key={player_phrase}/>)
     return (
-      <div className='player-phrase-list'>
+      <ul className='player-phrase-list list-unstyled'>
           {player_phrase_list}
-      </div>
+      </ul>
     );
 }
 
 // Singular phrase
 function PlayerPhrase (props) {
     return(
-        <section className='player-phrase'>
-            <div className='player'>{props.player_phrase}</div>
-            <input type='button' value='Vote'/>
-        </section>
+        <li className='player-phrase'>
+            <h2>{props.player_phrase} <input type='button' className='button' value='&hearts;'/></h2>
+        </li>
       )
 }
 
