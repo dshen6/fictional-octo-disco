@@ -33,9 +33,31 @@ function PlanningScreen(props) {
                 selectedCardIndex={selectedCardIndex}
                 setSelectedWordIndex1={setSelectedWordIndex1}
                 setSelectedWordIndex2={setSelectedWordIndex2}
+                setTransformedText={setTransformedText}
             />
         </section>
     )
+}
+
+function _validate(selectedCard, transformedText) {
+    let valid = true;
+    switch(selectedCard) {
+        case "rhyme":
+            transformedText.length > 0
+        break;
+        case "invert":
+        break;
+        case "subvert":
+        break;
+        case "swap":
+        break;
+        case "pump":
+        break;
+        case "dump":
+        break;
+        case "troll":
+        break;
+    }
 }
 
 /* Prompt */
@@ -78,7 +100,7 @@ function WordCard(props) {
             <button className={`word-card ${selectableClassName} ${isSelectedClassName}`} onClick={props.onClick}>
                 <h2 className='word-card-word type-handwriting'>
                 {props.word}
-                {props.showInput && <CardWordInput/>}
+                {props.showInput && <CardWordInput onTextChange={props.onTextChange}/>}
                 </h2>
             </button>
         </li>
@@ -86,10 +108,10 @@ function WordCard(props) {
 }
 // add confirm input button
 // Input for editing cards
-function CardWordInput() {
+function CardWordInput(props) {
     return (
         <div>
-        <input type='text' placeholder='Enter word'/>
+        <input type='text' placeholder='Enter word' onChange={e => props.onTextChange(e.target.value)}/>
         </div>
     )
 }
@@ -105,6 +127,7 @@ function PlayerCardRow(props) {
                     // if we picked a new card, erase previous selections
                     props.setSelectedWordIndex1(-1);
                     props.setSelectedWordIndex2(-1);
+                    props.setTransformedText("")
                 }
             }}
             isSelected={i == props.selectedCardIndex}/>)
