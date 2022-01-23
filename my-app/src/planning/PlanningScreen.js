@@ -1,7 +1,7 @@
-import './GameplayScreen.css';
+import './PlanningScreen.css';
 
 // View
-function GameplayScreen(props) {
+function PlanningScreen(props) {
     // todo: avatars carried over? colors?
     // const player_names = ['jax', 'daxter','ratchet','clank']
 
@@ -9,7 +9,7 @@ function GameplayScreen(props) {
     // todo: timer, add message to wait for troll phase
 
     return (
-        <section className='gameplay-container text-align-center'>
+        <section className='planning-container text-align-center'>
             <WordCardRow words={playerPhrase}/>
             <PlayerCardRow playerCards={props.cards}/>
         </section>
@@ -87,4 +87,4 @@ function PlayerCard(props) {
       )
 }
 
-export default GameplayScreen;
+export default PlanningScreen;

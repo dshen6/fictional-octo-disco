@@ -3,18 +3,18 @@ import ReconnectingWebsocket from 'reconnecting-websocket'
 
 import './App.css';
 import LobbyScreen from './lobby/LobbyScreen'
-import GameplayScreen from './gameplay/GameplayScreen'
+import PlanningScreen from './planning/PlanningScreen'
 import TrollingScreen from './trolling/TrollingScreen'
 import VotingScreen from './voting/VotingScreen'
 import SummaryScreen from './summary/SummaryScreen'
 import MockState from './MockState';
 
 const SCREENS = {
-  Lobby: 'LOBBY',
-  Gameplay: 'GAMEPLAY',
-  Trolling: 'TROLLING',
-  Voting: 'VOTING',
-  Summary: 'SUMMARY'
+  Lobby: 'lobby',
+  Planning: 'planning',
+  Trolling: 'trolling',
+  Voting: 'voting',
+  Summary: 'summary'
 };
 
 const SHOULD_MOCK_STATE = true;
@@ -48,21 +48,41 @@ function handleMessage(message) {
   const reader = new FileReader()
 
   reader.onload = () => {
-    const data = JSON.parse(reader.result)
-    console.log('Received', data);
+    const msg = JSON.parse(reader.result)
+    console.log('Received', msg);
+    switch (msg.type) {
+      case "JoinResponse":
+        this.setState({
+          currentPlayerId: msg.playerId,
+          isSpectator: msg.isSpectator,
+          isHost: msg.isHost,
+        })
+        break;
 
-    if (data.type === 'PlayerList') {
-      this.setState({
-      });
-    } else if (data.type === 'PhraseUpdate') {
-      this.setState({
-      });
-    } else if (data.type === '') {
-      this.setState({
-      });
+      case "PlayerList":
+        break;
+
+      case "GameStateUpdate":
+        this.setState({
+          currentScreen: msg.state
+        })
+        break;
+      case "PhraseUpdate":
+        break;
+      case "GlobalPhraseUpdate":
+        break;
+      case "DeckDeal":
+        break;
+      case "PlayerTurn":
+        break;
+
+      case "VoteTotals":
+        break;
+    
+      default:
+        break;
     }
   }
-
   reader.readAsText(message.data)
 }
 
@@ -159,9 +179,9 @@ class App extends Component {
           onStartGame = {state.onStartGame} />
         break;
         
-      case SCREENS.Gameplay:
+      case SCREENS.Planning:
         pageComponent = 
-        <GameplayScreen
+        <PlanningScreen
           currentPlayerId = {state.currentPlayerId}
           players = {state.players}
           phrases = {state.phrases}
