@@ -39,26 +39,26 @@ function PlanningScreen(props) {
     )
 }
 
-function _validate(selectedCard, transformedText) {
-    let valid = true;
-    switch(selectedCard) {
-        case "rhyme":
-            transformedText.length > 0
-        break;
-        case "invert":
-        break;
-        case "subvert":
-        break;
-        case "swap":
-        break;
-        case "pump":
-        break;
-        case "dump":
-        break;
-        case "troll":
-        break;
-    }
-}
+// function _validate(selectedCard, transformedText) {
+//     let valid = true;
+//     switch(selectedCard) {
+//         case "rhyme":
+//             transformedText.length > 0
+//         break;
+//         case "invert":
+//         break;
+//         case "subvert":
+//         break;
+//         case "swap":
+//         break;
+//         case "pump":
+//         break;
+//         case "dump":
+//         break;
+//         case "troll":
+//         break;
+//     }
+// }
 
 /* Prompt */
 // todo: remove any extra punctuation
