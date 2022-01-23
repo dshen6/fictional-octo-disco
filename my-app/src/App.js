@@ -157,14 +157,15 @@ class App extends Component {
     this._sendMessage({ messageType: 'StartGame' })
   }
 
-  onUseCard = (cardIndex, position1, position2, playerId2, wordText) => {
+  onUseCard = (cardIndex, position1, position2, playerId2, wordText, mode) => {
     this._sendMessage({
       messageType: 'UseCard',
       cardIndex: cardIndex,
       position1: position1,
       position2: position2,
       playerId2: playerId2,
-      wordText: wordText
+      wordText: wordText,
+      mode: mode // 'delete' or 'stinky'
     });
   }
 

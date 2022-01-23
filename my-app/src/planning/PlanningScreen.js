@@ -1,6 +1,6 @@
 import './PlanningScreen.css';
 import CountdownTimer from '../components/CountdownTimer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function PlanningScreen(props) {
     const playerPhrase = props.phrases[props.currentPlayerId]
@@ -8,11 +8,27 @@ function PlanningScreen(props) {
     const [selectedCardIndex, setSelectedCardIndex] = useState(-1)
     const [selectedWordIndex1, setSelectedWordIndex1] = useState(-1)
     const [selectedWordIndex2, setSelectedWordIndex2] = useState(-1)
+    const [stinkyIndex, setStinkyIndex] = useState(-1) // todo
     const [transformedText, setTransformedText] = useState("")
 
     const expectTwoSelections = props.cards[selectedCardIndex] === "swap" && selectedWordIndex1 > -1
     const expectTextInputAfterSingleSelect = ["rhyme", "invert", "subvert", "pump"].includes(props.cards[selectedCardIndex])
-    const showPlusButtonForAddingStinky = props.cards[selectedCardIndex] === ["dump"] // todo
+    const isDump = props.cards[selectedCardIndex] === ["dump"] // todo
+
+    useEffect(() => {
+        // trigger swap
+        if (selectedWordIndex1 > -1 && selectedWordIndex2 > -1 && expectTwoSelections) {
+            props.onUseCard(selectedCardIndex, selectedWordIndex1, selectedWordIndex2, -1, "", "")
+        }
+        // trigger dump
+        if (isDump) {
+            if (selectedWordIndex1 > -1) {
+                props.onUseCard(selectedCardIndex, selectedWordIndex1, -1, -1, "", "delete")
+            } else if (stinkyIndex > -1) {
+                props.onUseCard(selectedCardIndex, stinkyIndex, -1, -1, "", "stinky")
+            }
+        }
+    })
 
     return (
         <section className='planning-container text-align-center'>
@@ -25,8 +41,12 @@ function PlanningScreen(props) {
                 expectTwoSelections={expectTwoSelections}
                 expectOneSelection={selectedCardIndex > -1}
                 expectTextInputAfterSingleSelect={expectTextInputAfterSingleSelect && selectedWordIndex1 > -1}
-                showPlusButtonForAddingStinky={showPlusButtonForAddingStinky}
+                isDump={isDump}
                 setTransformedText={setTransformedText}
+                transformedText={transformedText}
+                setStinkyIndex={setStinkyIndex}
+                selectedCardIndex={selectedCardIndex}
+                onUseCard={props.onUseCard}
                 />
             <PlayerCardRow playerCards={props.cards}
                 onSelectedCard={setSelectedCardIndex}
@@ -38,27 +58,6 @@ function PlanningScreen(props) {
         </section>
     )
 }
-
-// function _validate(selectedCard, transformedText) {
-//     let valid = true;
-//     switch(selectedCard) {
-//         case "rhyme":
-//             transformedText.length > 0
-//         break;
-//         case "invert":
-//         break;
-//         case "subvert":
-//         break;
-//         case "swap":
-//         break;
-//         case "pump":
-//         break;
-//         case "dump":
-//         break;
-//         case "troll":
-//         break;
-//     }
-// }
 
 /* Prompt */
 // todo: remove any extra punctuation
@@ -78,7 +77,12 @@ function WordCardRow(props) {
                     }
                 }
             }
-            onTextChange={props.setTransformedText}
+            onTextChange = {props.setTransformedText}
+            transformedText = {props.transformedText}
+            onSubmit = {e => {
+                props.onUseCard(props.selectedCardIndex, props.selectedWordIndex1, -1, -1, props.transformedText, "")
+            }
+            }
         />}
     )
     return (
@@ -97,12 +101,18 @@ function WordCard(props) {
     const isSelectedClassName = props.isSelected ? 'word-card-selected' : ''
     return(
         <li className='word-card-list-item'>
-            <button className={`word-card ${selectableClassName} ${isSelectedClassName}`} onClick={props.onClick}>
+            <div className={`word-card ${selectableClassName} ${isSelectedClassName}`} onClick={props.onClick}>
                 <h2 className='word-card-word type-handwriting'>
                 {props.word}
-                {props.showInput && <CardWordInput onTextChange={props.onTextChange}/>}
+                {props.showInput && 
+                    <CardWordInput 
+                        onTextChange={props.onTextChange}
+                        transformedText={props.transformedText}
+                        onSubmit={props.onSubmit}
+                    />
+                }
                 </h2>
-            </button>
+            </div>
         </li>
       )
 }
@@ -111,7 +121,11 @@ function WordCard(props) {
 function CardWordInput(props) {
     return (
         <div>
-        <input type='text' placeholder='Enter word' onChange={e => props.onTextChange(e.target.value)}/>
+            <form className='word-form form-horizontal-layout' onSubmit={_ => props.onSubmit(props.transformedText)}>
+                <input type='text' placeholder='Enter word' value={props.transformedText} onChange={e => props.onTextChange(e.target.value)}/>
+                <button className='button' type='submit'>Done</button>
+            </form>
+        
         </div>
     )
 }
@@ -157,5 +171,6 @@ function PlayerCard(props) {
         </li>
       )
 }
-
 export default PlanningScreen;
+
+

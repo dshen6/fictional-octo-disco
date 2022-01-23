@@ -2,6 +2,8 @@ import './LobbyScreen.css';
 import React, { useState } from "react";
 
 function LobbyScreen(props) {
+  const [name, setName] = useState("");
+
   const playerLimit = 4
   const playerNames = Object.keys(props.players).map(function(key){
     return props.players[key];
@@ -12,7 +14,9 @@ function LobbyScreen(props) {
       <PlayerIconRow playerNames={playerNames}/>
       <ReadyText readyPlayerCount={playerNames.length} playerLimit={playerLimit}/>
       <StartGameButton onStartGame ={props.onStartGame}/>
-      <NameInput onJoinRequest={props.onJoinRequest}/>
+      <NameInput onJoinRequest={props.onJoinRequest}
+        name={props.name}
+        setName={props.setName}/>
     </section>
   )
 }
@@ -51,11 +55,9 @@ function StartGameButton(props) {
 }
 
 function NameInput(props) {
-  const [name, setName] = useState("");
-
   return (
-    <form className='player-name-form form-horizontal-layout' onSubmit={_ => props.onJoinRequest(name)}>
-      <input type='text' placeholder='Enter name' value={name} onChange={e => setName(e.target.value)}/>
+    <form className='player-name-form form-horizontal-layout' onSubmit={_ => props.onJoinRequest(props.name)}>
+      <input type='text' placeholder='Enter name' value={props.name} onChange={e => props.setName(e.target.value)}/>
       <button className='button' type='submit'>Ready</button>
     </form>
   )
