@@ -5,7 +5,6 @@
     align-content: space-between;
     flex-direction: column;
     width: 100%;
-    max-width: 960px;
 }
 
 .word-card-row {
