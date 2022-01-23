@@ -6,7 +6,7 @@ function LobbyScreen(props) {
     return props.players[key];
   });
   return (
-    <section className='lobby-container'>
+    <section className='lobby-container game-page-container'>
       <h1>Join the game!</h1>
       <PlayerIconRow playerNames={playerNames}/>
       <ReadyText readyPlayerCount={playerNames.length} playerLimit={playerLimit}/>

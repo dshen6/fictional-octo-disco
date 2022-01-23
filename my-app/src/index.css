@@ -14,9 +14,15 @@ code {
 }
 
 .game-container {
-  padding: 32px;
   display: flex;
   justify-content: center;
+  box-sizing: border-box;
+}
+
+.game-page-container {
+  width: 100%;
+  max-width: 720px;
+  padding: 32px;
 }
 
 .button {
@@ -68,18 +74,37 @@ h3 {
   font-size: 24px
 }
 
-.list-unstyled {
-  list-style: none;
+.type-handwriting {
+  font-family:"ff-providence-sans-web-pro";
 }
 
-.list-horizontal {
+.list-unstyled {
+  list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  column-gap: 32px;
-  justify-content: center;
 }
 
 .text-align-center {
   text-align: center;
+}
+
+.list-horizontal {
+  display: grid;
+  grid-gap: 2em 1em;
+}
+
+.hide {
+  display: none;
+}
+
+@media screen and (min-width: 760px) {
+  .list-horizontal {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 759px) {
+  .list-horizontal {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }

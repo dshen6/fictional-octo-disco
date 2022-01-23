@@ -12,7 +12,9 @@ function TrollingScreen () {
     // todo: walkthrough of cards applied
 
     return (
-        <section className='trolling-container'> 
+        <section className='trolling-container game-page-container'> 
+            <h1>Troll time!</h1>
+            <h2>Trolls, swap your words.</h2>
             <PlayerPhraseList player_phrases={player_phrases}/>
         </section>
     )
@@ -25,9 +27,9 @@ function TrollingScreen () {
 function PlayerPhraseList (props) {
     const player_phrase_list = props.player_phrases.map(player_phrase => <PlayerWordCardRow player_phrase={player_phrase} key={player_phrase}/>)
     return (
-      <div className='player-phrase-list'>
+      <ol className='player-phrase-list'>
           {player_phrase_list}
-      </div>
+      </ol>
     );
 }
 
@@ -37,9 +39,11 @@ function PlayerWordCardRow (props) {
     const split_words = props.player_phrase.split(' ')
     const word_cards = split_words.map(word => <PhraseWordCard word={word} key={word}/>)
     return(
-        <section className='player-phrase'>
-            {word_cards}
-        </section>
+        <li className='player-phrase'>
+            <ul className='list-unstyled player-phrase-row'>
+                {word_cards}
+            </ul>
+        </li>
       )
 }
 
@@ -47,11 +51,13 @@ function PlayerWordCardRow (props) {
 function PhraseWordCard(props) {
     // TODO: swap mechanic
     return (
-        <button className='word-card'>
-            <span className='word-card-word'>
-              {props.word}
-            </span>
-        </button>
+        <li className='player-phrase-word'>
+            <button className='word-card'>
+                <h3 className='word-card-word'>
+                {props.word}
+                </h3>
+            </button>
+        </li>
     )
 }
 
