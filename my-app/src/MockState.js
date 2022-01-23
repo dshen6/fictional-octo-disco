@@ -8,12 +8,12 @@ export default {
     votes: {
         "0": 2,
         "1": 1,
-        "2": 1,
-        "4": 0
+        "2": 2,
+        "3": 0
     }, // Voting, summary Screen
     phrases: {  "0": ["face", "bready", "slow", "wonders", "the", "slow"],
                 "1": ["Salty", "and", "unsteady", "wounds", "the", "face"],
-                "2": ["face", "bready", "slow", "wonders", "the", "slow"],
+                "2": ["farce", "bready", "screaming", "wonders", "stinky", "race"],
                 "3": ["Glow", "Relapse", "and", "and", "Face"]
             }, // dict where key is playerId, value is their phrase as a string
     cards: ["troll", "swap", "subvert", "swap"], // all cards dealt this round

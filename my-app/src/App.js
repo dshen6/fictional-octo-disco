@@ -6,6 +6,7 @@ import LobbyScreen from './lobby/LobbyScreen'
 import PlanningScreen from './planning/PlanningScreen'
 import TrollingScreen from './trolling/TrollingScreen'
 import VotingScreen from './voting/VotingScreen'
+import ResultsScreen from './results/ResultsScreen'
 import SummaryScreen from './summary/SummaryScreen'
 import MockState from './MockState';
 
@@ -14,6 +15,7 @@ const SCREENS = {
   Planning: 'planning',
   Trolling: 'trolling',
   Voting: 'voting',
+  Results: 'results',
   Summary: 'summary'
 };
 
@@ -234,6 +236,16 @@ class App extends Component {
           votes = {state.votes}
           isSpectator = {state.isSpectator}
           onVote = {this.onVote} />
+        break;
+
+      case SCREENS.Results:
+        pageComponent =
+        <ResultsScreen
+          currentPlayerId = {state.currentPlayerId}
+          players = {state.players}
+          phrases = {state.phrases}
+          votes = {state.votes}
+          isSpectator = {state.isSpectator} />
         break;
 
       case SCREENS.Summary:
