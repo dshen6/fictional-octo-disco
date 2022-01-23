@@ -42,7 +42,7 @@ function WordCard (props) {
     return(
         <li className='word-card-list-item'>
             <button className='word-card'>
-                <h2 className='word-card-word'>
+                <h2 className='word-card-word type-handwriting'>
                 {props.word}
                 <CardWordInput/>
                 </h2>

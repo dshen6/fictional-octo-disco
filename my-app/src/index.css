@@ -74,6 +74,10 @@ h3 {
   font-size: 24px
 }
 
+.type-handwriting {
+  font-family:"ff-providence-sans-web-pro";
+}
+
 .list-unstyled {
   list-style: none;
   margin: 0;
@@ -87,6 +91,10 @@ h3 {
 .list-horizontal {
   display: grid;
   grid-gap: 2em 1em;
+}
+
+.hide {
+  display: none;
 }
 
 @media screen and (min-width: 760px) {
