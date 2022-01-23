@@ -11,6 +11,7 @@ class Game:
         self.currentPhase = "lobby"
         self.timer = -1
         self.lastTickTime = time.perf_counter()
+        self.lastTimerBroadcast = self.lastTickTime
         self.phaseTimeUp = False
         self.playerTurn = -1
 
@@ -26,6 +27,12 @@ class Game:
         elapsed = currentTime - self.lastTickTime
         self.lastTickTime = currentTime
         self.updateTimer(elapsed)
+
+        # send timer updates every 10 seconds
+        if currentTime - self.lastTimerBroadcast > 10:
+            if self.timer > 0:
+                self.sendPhaseUpdate(clients)
+            self.lastTimerBroadcast = currentTime
 
         # update game state
         tickFunc = {
@@ -92,7 +99,7 @@ class Game:
         # handle starting the game
         for msg in incoming:
             if msg.messageType == "StartGame":
-                self.setupPlanning()
+                self.setupPlanning(clients)
                 break
 
     def setupPlanning(self, clients):
@@ -119,7 +126,12 @@ class Game:
                 if cardIndex < 0 or cardIndex >= len(playerData.deck):
                     continue
                 actions = {
-                    "rhyme": lambda: playerData.applyRhyme(msg.payload["position1"], msg.payload["wordText"])
+                    "rhyme":   lambda: playerData.applyRhyme(msg.payload["position1"], msg.payload["wordText"]),
+                    "invert":  lambda: playerData.applyInvert(msg.payload["position1"], msg.payload["wordText"]),
+                    "subvert": lambda: playerData.applySubvert(msg.payload["position1"], msg.payload["wordText"]),
+                    "swap":    lambda: playerData.applySwap(msg.payload["position1"], msg.payload["position2"]),
+                    "pump":    lambda: playerData.applyPump(msg.payload["position1"], msg.payload["wordText"]),
+                    "dump":    lambda: playerData.applyDump(msg.payload["position1"], msg.payload["mode"])
                 }
                 cardType = playerData.deck[cardIndex]
                 if cardType in actions:
@@ -131,7 +143,7 @@ class Game:
         
         # handle timer
         if self.phaseTimeUp:
-            self.setupTrolling()
+            self.setupTrolling(clients)
 
     def setupTrolling(self, clients):
         # send the final phrase update
@@ -150,7 +162,7 @@ class Game:
     def nextTrollingTurn(self, clients):
         possiblePlayers = []
         for playerId in self.playerData:
-            if "troll" in self.playerData.deck:
+            if "troll" in self.playerData[playerId].deck:
                 possiblePlayers.append(playerId)
         if len(possiblePlayers) == 0:
             return False
@@ -162,6 +174,31 @@ class Game:
     def trollingTick(self, incoming, clients):
         self.handleSpectators(incoming, clients)
 
+        # handle card usage
+        for msg in incoming:
+            if msg.messageType == "UseCard":
+                playerId = self.getPlayerId(msg.clientId)
+                if playerId < 0:
+                    continue
+                if self.playerTurn != playerId:
+                    continue
+                playerData = self.playerData[playerId]
+                cardIndex = msg.payload["cardIndex"]
+                if cardIndex < 0 or cardIndex >= len(playerData.deck):
+                    continue
+                if playerData.deck[cardIndex] != "troll":
+                    continue
+                otherPlayerId = msg.payload["playerId2"]
+                if not otherPlayerId in self.playerData:
+                    continue
+                otherPlayerData = self.playerData[otherPlayerId]
+                success = playerData.applyToll(msg.payload["position1"], otherPlayerData, msg.payload["position2"])
+                if success:
+                    del playerData.deck[cardIndex]
+                    self.send(msg.clientId, "CardConsumed", {"playerId": playerId, "cardIndex": cardIndex})
+                    self.sendGlobalPhraseUpdate()
+                    self.nextTrollingTurn()
+
         # handle timer
         if self.phaseTimeUp:
             isTrolling = self.nextTrollingTurn(clients)
@@ -171,10 +208,49 @@ class Game:
                 self.setupVoting(clients)
 
     def setupVoting(self, clients):
-        pass
+        # switch to the trolling phase
+        self.currentPhase = "voting"
+        self.timer = GameRules.VOTING_PHASE_TIME
+        self.sendPhaseUpdate(clients)
+
+        #reset all votes
+        for playerId in self.playerData:
+            self.playerData[playerId].currentVotes = 0
+        self.sendCurretVotes(clients)
 
     def votingTick(self, incoming, clients):
         self.handleSpectators(incoming, clients)
+
+        # handle votes
+        sendTotals = False
+        for msg in incoming:
+            if msg.messageType == "Vote":
+                playerId = self.getPlayerId(msg.clientId)
+                if playerId < 0:
+                    continue
+                targetPlayerId = msg.payload["playerId"]
+                if not targetPlayerId in self.playerData:
+                    continue
+                self.playerData[targetPlayerId].currentVotes += 1
+                sendTotals = True
+
+        #send the updates vote counts
+        if sendTotals:
+            self.sendCurrentVotes(clients)
+
+        # handle timer
+        if self.phaseTimeUp:
+            self.setupResults()
+
+    def setupResults(self, clients):
+        # apply votes to multi-round totals
+        for playerId in self.playerData:
+            self.playerData[playerId].totalVotes += self.playerData[playerId].currentVotes
+
+        # switch to the results phase
+        self.currentPhase = "results"
+        self.timer = GameRules.RESULTS_PHASE_TIME
+        self.sendPhaseUpdate(clients)
 
     def resultsTick(self, incoming, clients):
         self.handleSpectators(incoming, clients)
@@ -193,11 +269,11 @@ class Game:
     def distributeCards(self, numCards):
         for playerId in self.playerData:
             playerData = self.playerData[playerId]
-            playerData.cards = []
+            playerData.deck = []
             for i in range(numCards):
                 card = GameRules.CARDS[random.randint(0, len(GameRules.CARDS) - 1)]
-                playerData.cards.append(card)
-            self.send(self.getClientId(playerId), "DeckDeal", {"playerId": playerId, "cards": playerData.cards})
+                playerData.deck.append(card)
+            self.send(self.getClientId(playerId), "DeckDeal", {"playerId": playerId, "cards": playerData.deck})
 
     def sendPhaseUpdate(self, clients):
         payload = {"state": self.currentPhase}
@@ -207,12 +283,19 @@ class Game:
             self.send(clientId, "GameStateUpdate", payload)
 
     def sendGlobalPhraseUpdate(self, clients):
-        content = {}
+        content = { }
         for playerId in self.playerData:
             playerData = self.playerData[playerId]
             content[playerId] = playerData.phrase
         for clientId in clients:
             self.send(clientId, "GlobalPhraseUpdate", {"phrases": content})
+
+    def sendCurrentVotes(self, clients):
+        votes = { }
+        for playerId in self.playerData:
+            votes[playerId] = self.playerData[playerId].currentVotes
+        for clientId in clients:
+            self.send(clientId, "VoteTotals", {"votes": votes})
 
     def send(self, clientId, messageType, payload):
         self.outgoingMessages.append(Message(clientId, messageType, payload))
