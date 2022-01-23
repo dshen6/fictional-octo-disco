@@ -1,7 +1,7 @@
 import './SummaryScreen.css';
 
 // View
-function SummaryScreen () {
+function SummaryScreen(props) {
     let winner = 'daxter'
     let winning_phrase = 'Salty and unsteady wounds the face'
     return (

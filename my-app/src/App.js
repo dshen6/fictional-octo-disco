@@ -116,7 +116,7 @@ class App extends Component {
     this._sendMessage({ messageType: 'StartGame' })
   }
 
-  _onUseCard = (cardType, position1, position2, playerId2, payload) => {
+  onUseCard = (cardType, position1, position2, playerId2, payload) => {
     this._sendMessage({
       messageType: 'UseCard',
       cardType: cardType,
@@ -154,7 +154,9 @@ class App extends Component {
           currentPlayerId = {state.currentPlayerId}
           players = {state.players}
           isHost = {state.isHost}
-          isSpectator = {state.isSpectator} />
+          isSpectator = {state.isSpectator}
+          onJoinRequest = {state.onJoinRequest} 
+          onStartGame = {state.onStartGame} />
         break;
         
       case SCREENS.Gameplay:
@@ -164,7 +166,8 @@ class App extends Component {
           players = {state.players}
           phrases = {state.phrases}
           cards = {state.cards}
-          isSpectator = {state.isSpectator} />
+          isSpectator = {state.isSpectator}
+          onUseCard = {state.onUseCard} />
         break;
       
       case SCREENS.Trolling:
@@ -174,7 +177,8 @@ class App extends Component {
           players = {state.players}
           phrases = {state.phrases}
           isSpectator = {state.isSpectator}
-          currentPlayerTrollTurnId = {state.currentPlayerTrollTurnId} />
+          currentPlayerTrollTurnId = {state.currentPlayerTrollTurnId}
+          onUseCard = {state.onUseCard} />
         break;
       
       case SCREENS.Voting:
@@ -184,7 +188,8 @@ class App extends Component {
           players = {state.players}
           phrases = {state.phrases}
           votes = {state.votes}
-          isSpectator = {state.isSpectator} />
+          isSpectator = {state.isSpectator}
+          onVote = {state.onVote} />
         break;
 
       case SCREENS.Summary:
