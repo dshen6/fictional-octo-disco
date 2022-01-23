@@ -15,8 +15,8 @@ function LobbyScreen(props) {
       <ReadyText readyPlayerCount={playerNames.length} playerLimit={playerLimit}/>
       <StartGameButton onStartGame ={props.onStartGame}/>
       <NameInput onJoinRequest={props.onJoinRequest}
-        name={props.name}
-        setName={props.setName}/>
+        name={name}
+        setName={setName}/>
     </section>
   )
 }
