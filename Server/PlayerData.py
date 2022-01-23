@@ -4,6 +4,8 @@ class PlayerData:
         self.phrase = []
         self.deck = []
         self.lockedIndexes = []
+        self.currentVotes = 0
+        self.totalVotes = 0
 
     def applyGeneric(self, wordIndex, replacement):
         if wordIndex < 0 or wordIndex >= len(self.phrase):

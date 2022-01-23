@@ -208,10 +208,49 @@ class Game:
                 self.setupVoting(clients)
 
     def setupVoting(self, clients):
-        pass
+        # switch to the trolling phase
+        self.currentPhase = "voting"
+        self.timer = GameRules.VOTING_PHASE_TIME
+        self.sendPhaseUpdate(clients)
+
+        #reset all votes
+        for playerId in self.playerData:
+            self.playerData[playerId].currentVotes = 0
+        self.sendCurretVotes(clients)
 
     def votingTick(self, incoming, clients):
         self.handleSpectators(incoming, clients)
+
+        # handle votes
+        sendTotals = False
+        for msg in incoming:
+            if msg.messageType == "Vote":
+                playerId = self.getPlayerId(msg.clientId)
+                if playerId < 0:
+                    continue
+                targetPlayerId = msg.payload["playerId"]
+                if not targetPlayerId in self.playerData:
+                    continue
+                self.playerData[targetPlayerId].currentVotes += 1
+                sendTotals = True
+
+        #send the updates vote counts
+        if sendTotals:
+            self.sendCurrentVotes(clients)
+
+        # handle timer
+        if self.phaseTimeUp:
+            self.setupResults()
+
+    def setupResults(self, clients):
+        # apply votes to multi-round totals
+        for playerId in self.playerData:
+            self.playerData[playerId].totalVotes += self.playerData[playerId].currentVotes
+
+        # switch to the results phase
+        self.currentPhase = "results"
+        self.timer = GameRules.RESULTS_PHASE_TIME
+        self.sendPhaseUpdate(clients)
 
     def resultsTick(self, incoming, clients):
         self.handleSpectators(incoming, clients)
@@ -244,12 +283,19 @@ class Game:
             self.send(clientId, "GameStateUpdate", payload)
 
     def sendGlobalPhraseUpdate(self, clients):
-        content = {}
+        content = { }
         for playerId in self.playerData:
             playerData = self.playerData[playerId]
             content[playerId] = playerData.phrase
         for clientId in clients:
             self.send(clientId, "GlobalPhraseUpdate", {"phrases": content})
+
+    def sendCurrentVotes(self, clients):
+        votes = { }
+        for playerId in self.playerData:
+            votes[playerId] = self.playerData[playerId].currentVotes
+        for clientId in clients:
+            self.send(clientId, "VoteTotals", {"votes": votes})
 
     def send(self, clientId, messageType, payload):
         self.outgoingMessages.append(Message(clientId, messageType, payload))
