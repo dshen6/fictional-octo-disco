@@ -47,10 +47,9 @@ function PlayerPhrase(props) {
         props.setPlayerHasVoted(true)
         props.onSelectedPhrase(props.phraseIndex)
     }}/>
-
-    console.log(props.phraseVotes)
     
-    const playerVoteCount = [...Array(props.phraseVotes)].map((vote, i) => <VoteIcon key={i} />)
+    const playerVoteCount = props.phraseVotes ? [...Array(props.phraseVotes)].map((vote, i) => <VoteIcon key={i} />) : ''
+    
     // TODO: figure out why it still returns a checkmark if there are zero votes
 
     return(
