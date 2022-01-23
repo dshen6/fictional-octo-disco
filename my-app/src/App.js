@@ -17,7 +17,7 @@ const SCREENS = {
   Summary: 'summary'
 };
 
-const SHOULD_MOCK_STATE = false;
+const SHOULD_MOCK_STATE = true;
 
 const DEBUG = process.env.NODE_ENV === 'development'
 
@@ -78,6 +78,10 @@ function handleMessage(message) {
             phrases: msg.phrases
           })
         break;
+      case "CardConsumed":
+        // this.setState({
+          // cardIndex
+        // })
       case "GlobalPhraseUpdate":
         this.setState({
           phrases: msg.phrases
@@ -153,10 +157,10 @@ class App extends Component {
     this._sendMessage({ messageType: 'StartGame' })
   }
 
-  onUseCard = (cardType, position1, position2, playerId2, wordText) => {
+  onUseCard = (cardIndex, position1, position2, playerId2, wordText) => {
     this._sendMessage({
       messageType: 'UseCard',
-      cardType: cardType,
+      cardIndex: cardIndex,
       position1: position1,
       position2: position2,
       playerId2: playerId2,
