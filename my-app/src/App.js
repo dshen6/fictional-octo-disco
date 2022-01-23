@@ -153,14 +153,14 @@ class App extends Component {
     this._sendMessage({ messageType: 'StartGame' })
   }
 
-  onUseCard = (cardType, position1, position2, playerId2, payload) => {
+  onUseCard = (cardType, position1, position2, playerId2, wordText) => {
     this._sendMessage({
       messageType: 'UseCard',
       cardType: cardType,
       position1: position1,
       position2: position2,
       playerId2: playerId2,
-      payload: payload
+      wordText: wordText
     });
   }
 

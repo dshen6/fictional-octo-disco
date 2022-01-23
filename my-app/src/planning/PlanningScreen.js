@@ -1,5 +1,6 @@
 import './PlanningScreen.css';
 import CountdownTimer from '../components/CountdownTimer';
+import { useState } from 'react';
 
 // View
 function PlanningScreen(props) {
@@ -9,22 +10,29 @@ function PlanningScreen(props) {
     const playerPhrase = props.phrases[props.currentPlayerId]
     // todo: timer, add message to wait for troll phase
 
-    let trollCardExists
+    const trollCardExists = props.cards.includes('troll') // todo: maybe move this down
 
-    if (props.cards.includes('troll')) {
-        trollCardExists = true
-    } else {
-        trollCardExists = false
-    }
+    let selectedWordIndex1, selectedWordIndex2
+    let transformedWordText
 
     return (
         <section className='planning-container text-align-center'>
             <CountdownTimer currentScreenTimer={props.currentScreenTimer}/>
-            <WordCardRow words={playerPhrase}/>
-            <PlayerCardRow playerCards={props.cards} trollCardExists={trollCardExists}/>
+            <WordCardRow words={playerPhrase} />
+            <PlayerCardRow playerCards={props.cards} trollCardExists={trollCardExists} />
         </section>
     )
 }
+
+/* TODOS:
+1. Player selects card to use = currentSelectedCard
+2. Player selects word to apply card to = selectedWordIndex1, selectedWordIndex2
+3. Player performs action on word(s) = (change index of currentSelectedWords), replace currentSelectedWord1 for rewrite
+CARDTYPES = SWAP, EDIT
+
+name of card -> swap or edit type, pick word OR edit field if cardtype is edit
+
+*/
 
 /* ----- Components in view ----- */
 
@@ -72,8 +80,14 @@ function CardWordInput() {
 /* Player cards */
 // Show list of cards
 function PlayerCardRow(props) {
+    // selected card index will be passed by function on the right
+    const [selectedCardIndex, setSelectedCardIndex] = useState(-1)
+
     // todo: remove any extra punctuation
-    const playerCards = props.playerCards.map((card, i) => <PlayerCard card={card} key={i}/>)
+    const playerCards = props.playerCards.map((card, i) =>
+        <PlayerCard card={card} key={i} onClick={e => setSelectedCardIndex(i)} />)
+
+    // todo: clean up trollNote
     let trollNote
 
     if (props.trollCardExists) {
@@ -93,6 +107,8 @@ function PlayerCardRow(props) {
 
 // Singular card
 function PlayerCard(props) {
+
+    
     let trollCardStatus
 
     if (props.card == 'troll') {
@@ -103,7 +119,7 @@ function PlayerCard(props) {
 
     return(
         <li>
-            <button className='player-card' {...trollCardStatus}>
+            <button className='player-card' {...trollCardStatus} onClick={props.onClick}>
                 <h3 className='player-card-word'>
                 {props.card}
                 </h3>
