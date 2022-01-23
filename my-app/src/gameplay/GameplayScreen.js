@@ -40,12 +40,14 @@ function WordCardRow (props) {
 // Singular word
 function WordCard (props) {
     return(
-        <button className='word-card'>
-            <h2 className='word-card-word'>
-              {props.word}
-              <CardWordInput/>
-            </h2>
-        </button>
+        <li className='word-card-list-item'>
+            <button className='word-card'>
+                <h2 className='word-card-word'>
+                {props.word}
+                <CardWordInput/>
+                </h2>
+            </button>
+        </li>
       )
 }
 
@@ -69,7 +71,7 @@ function PlayerCardRow (props) {
     return (
         <section class='player-card-container'>
             <h1>Choose a card:</h1>
-            <ul className='player-card-row list-unstyled list-horizontal'>
+            <ul className='player-card-row list-unstyled'>
                 {player_cards}
             </ul>
         </section>

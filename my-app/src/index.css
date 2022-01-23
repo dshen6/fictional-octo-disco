@@ -72,14 +72,25 @@ h3 {
   list-style: none;
 }
 
+.text-align-center {
+  text-align: center;
+}
+
 .list-horizontal {
   margin: 0;
   padding: 0;
-  display: flex;
-  column-gap: 32px;
-  justify-content: center;
+  display: grid;
+  grid-gap: 2em 1em;
 }
 
-.text-align-center {
-  text-align: center;
+@media screen and (min-width: 760px) {
+  .list-horizontal {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 759px) {
+  .list-horizontal {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
