@@ -8,7 +8,7 @@ ServerState = {
     "running": True,
     "clients": {},
     "incomingMessages": [],
-    "nextPlayerId": 0
+    "nextClientId": 0
 }
 
 def Main():
@@ -31,8 +31,9 @@ def Main():
 
         # send outgoing messages
         for msg in outgoing:
-            targetPlayer = msg.playerId
-            payload = msg.payload
+            targetPlayer = msg.clientId
+            payload = msg.payload.copy()
+            payload["messageType"] = msg.messageType
             if targetPlayer in ServerState["clients"]:
                 client = ServerState["clients"][targetPlayer]
                 client.sendMessage(json.dumps(payload))
@@ -47,35 +48,35 @@ class ClientConnection(WebSocket):
     def handleMessage(self):
         try:
             message = json.loads(self.data)
-            ServerState["incomingMessages"].append(Message(self.getPlayerId(), message))
+            ServerState["incomingMessages"].append(Message(self.getClientId(), message["messageType"], message))
         except BaseException as error:
             print("Error handling message: " + str(error))
 
     def handleConnected(self):
         try:
-            playerId = ServerState["nextPlayerId"]
-            ServerState["nextPlayerId"] += 1
-            ServerState["clients"][playerId] = self
-            print("Player", playerId, "joined")
+            clientId = ServerState["nextClientId"]
+            ServerState["nextClientId"] += 1
+            ServerState["clients"][clientId] = self
+            print("Client", clientId, "joined")
         except BaseException as error:
             print("Error on connect: " + str(error))
 
     def handleClose(self):
         try:
-            playerId = self.getPlayerId()
-            if playerId >= 0:
-                del ServerState["clients"][playerId]
-                print("Player", playerId, "left")
+            clientId = self.getClientId()
+            if clientId >= 0:
+                del ServerState["clients"][clientId]
+                print("Client", clientId, "left")
         except BaseException as error:
             print("Error on disconnect: " + str(error))
     
-    def getPlayerId(self):
-        playerId = -1
+    def getClientId(self):
+        clientId = -1
         clients = ServerState["clients"]
         for clientId in clients:
             if clients[clientId] == self:
-                playerId = clientId
-        return playerId
+                clientId = clientId
+        return clientId
 
 if __name__ == "__main__":
     Main()
