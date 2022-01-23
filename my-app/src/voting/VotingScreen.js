@@ -16,7 +16,8 @@ function VotingScreen(props) {
             selectedPhraseIndex={selectedPhraseIndex}
             playerHasVoted={playerHasVoted}
             setPlayerHasVoted={setPlayerHasVoted}
-            setSelectedPhraseIndex={setSelectedPhraseIndex}/>
+            setSelectedPhraseIndex={setSelectedPhraseIndex}
+            votes={props.votes}/>
         </section>
     )
 }
@@ -45,13 +46,21 @@ function PlayerPhrase(props) {
         props.setPlayerHasVoted(true)
         props.onSelectedPhrase(props.phraseIndex)
     }}/>
-    let playerSelectionIcon = (props.phraseIndex == props.selectedPhraseIndex) ? '&#x2713' : ''
+    
+    const playerVoteCount = [...Array(props.votes)].map((vote, i) => <VoteIcon key={i} />)
+    // TODO: figure out why it still returns a checkmark if there are zero votes
 
     return(
         <li className='player-phrase'>
-            <h2 className='type-handwriting'>{props.playerPhrase.join(" ")} {playerVoteButton} {playerSelectionIcon}</h2>
+            <h2 className='type-handwriting'>{props.playerPhrase.join(" ")} {playerVoteButton} {playerVoteCount} </h2>
         </li>
       )
+}
+
+function VoteIcon () {
+    return (
+        <span className="player-vote-icon">&#x2713;</span>
+    )
 }
 
 export default VotingScreen;
