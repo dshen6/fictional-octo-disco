@@ -18,7 +18,7 @@ function PlayerIconRow(props) {
   // Map function: For name in player names, spit it out into player icon
   const player_icons = props.player_names.map(name => <PlayerIcon player_name={name} key={name}/>)
   return (
-    <ul className='player-list'>
+    <ul className='player-list list-unstyled list-horizontal'>
         {player_icons}
     </ul>
   );
@@ -42,7 +42,7 @@ function ReadyText(props) {
 function ReadyButton() {
   return (
     <div className='ready-section'>
-      <button>Start Game</button>
+      <button className='button'>Start Game</button>
     </div>
   )
 }
@@ -58,7 +58,7 @@ function NameInput() {
   
 function NameInputEnter() {
   return (
-    <button>Ready</button>
+    <button className='button'>Ready</button>
   )
 }
 

@@ -1,0 +1,32 @@
+.game-container {
+    height: 100vh;
+    box-sizing: border-box;
+    padding-bottom: 0;
+}
+
+.gameplay-container {
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-content: space-between;
+    flex-direction: column;
+    max-width: 960px;
+}
+
+.word-card {
+    width: 100%;
+}
+
+.word-card input {
+    width: 100%;
+}
+
+.player-card-container {
+    padding: 32px 32px 0;
+    margin-top: auto;
+}
+
+.player-card {
+    width: 30vh;
+    padding: 32px;
+}

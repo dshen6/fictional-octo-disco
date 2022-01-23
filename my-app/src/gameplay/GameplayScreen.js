@@ -12,11 +12,8 @@ function GameplayScreen () {
     // todo: timer, add message to wait for troll phase
 
     return (
-        <section className='gameplay-container'> 
-            Your phrase:
+        <section className='gameplay-container text-align-center'>
             <WordCardRow phrase={phrase}/>
-
-            Choose a card:
             <PlayerCardRow player_cards={player_cards}/>
         </section>
     )
@@ -32,7 +29,10 @@ function WordCardRow (props) {
     const word_cards = split_words.map(word => <WordCard word={word} key={word}/>)
     return (
       <div className='word-card-row'>
-          {word_cards}
+          <h1>Your phrase:</h1>
+          <ul className='list-unstyled list-horizontal'>
+            {word_cards}
+          </ul>
       </div>
     );
 }
@@ -41,10 +41,10 @@ function WordCardRow (props) {
 function WordCard (props) {
     return(
         <button className='word-card'>
-            <span className='word-card-word'>
+            <h2 className='word-card-word'>
               {props.word}
               <CardWordInput/>
-            </span>
+            </h2>
         </button>
       )
 }
@@ -67,20 +67,25 @@ function PlayerCardRow (props) {
     // todo: remove any extra punctuation
     const player_cards = props.player_cards.map(card => <PlayerCard card={card} key={card}/>)
     return (
-      <div className='player-card-row'>
-          {player_cards}
-      </div>
+        <section class='player-card-container'>
+            <h1>Choose a card:</h1>
+            <ul className='player-card-row list-unstyled list-horizontal'>
+                {player_cards}
+            </ul>
+        </section>
     );
 }
 
 // Singular card
 function PlayerCard (props) {
     return(
-        <button className='player-card'>
-            <span className='player-card-word'>
-              {props.card}
-            </span>
-        </button>
+        <li>
+            <button className='player-card'>
+                <h3 className='player-card-word'>
+                {props.card}
+                </h3>
+            </button>
+        </li>
       )
 }
 

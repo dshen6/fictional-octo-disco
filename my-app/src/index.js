@@ -11,7 +11,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   <React.StrictMode>
     <section className='game-container'>
-      <LobbyScreen/>
+      <GameplayScreen/>
     </section>
   </React.StrictMode>,
   document.getElementById('root')

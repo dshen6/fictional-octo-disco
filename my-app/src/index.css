@@ -19,7 +19,7 @@ code {
   justify-content: center;
 }
 
-button, input[type='button'] {
+.button {
   -webkit-appearance: none;
   border-radius: 4px;
   background-color: blue;
@@ -28,12 +28,12 @@ button, input[type='button'] {
   border: 0;
 }
 
-button:hover, input[type='button']:hover {
+.button:hover {
   background-color: darkslategrey;
   cursor: pointer;
 }
 
-button:active, input[type='button']:active {
+.button:active {
   background-color: darkblue;
   cursor: pointer;
 }
@@ -66,4 +66,20 @@ h2 {
 
 h3 {
   font-size: 24px
+}
+
+.list-unstyled {
+  list-style: none;
+}
+
+.list-horizontal {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  column-gap: 32px;
+  justify-content: center;
+}
+
+.text-align-center {
+  text-align: center;
 }
