@@ -52,7 +52,7 @@ function PhraseWordCard(props) {
     return (
         <li className='player-phrase-word'>
             <button className='word-card'>
-                <h3 className='word-card-word'>
+                <h3 className='word-card-word type-handwriting'>
                 {props.word}
                 </h3>
             </button>
