@@ -27,7 +27,7 @@ function PlayerPhraseList(props) {
 function PlayerPhrase(props) {
     return(
         <li className='player-phrase'>
-            <h2>{props.playerPhrase.join(" ")} <input type='button' className='button' value='&hearts;'/></h2>
+            <h2 className='type-handwriting'>{props.playerPhrase.join(" ")} <input type='button' className='button' value='&hearts;'/></h2>
         </li>
       )
 }

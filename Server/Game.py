@@ -88,13 +88,14 @@ class Game:
                 playerNames[playerId] = self.playerData[playerId].name
             for clientId in clients:
                 self.send(clientId, "PlayerList", {"players": playerNames})
+            self.sendPhaseUpdate(clients)
         
         # handle starting the game
         for msg in incoming:
             if msg.messageType == "StartGame":
                 self.currentPhase = "planning"
-                for clientId in clients:
-                    self.send(clientId, "GameStateUpdate", {"state": "planning", "timer": GameRules.PLANNING_PHASE_TIME})
+                self.timer = GameRules.PLANNING_PHASE_TIME
+                self.sendPhaseUpdate(clients)
                 phrase = self.distributePhrase()
                 self.distributeCards(len(phrase) - 1)
 
@@ -109,24 +110,23 @@ class Game:
                 break
 
     def planningTick(self, incoming, clients):
-        self.handleSpectators(incoming)
+        self.handleSpectators(incoming, clients)
 
         #for msg in incoming:
         #    if msg.messageType == "UseCard":
-                
 
 
     def trollingTick(self, incoming, clients):
-        self.handleSpectators(incoming)
+        self.handleSpectators(incoming, clients)
 
     def votingTick(self, incoming, clients):
-        self.handleSpectators(incoming)
+        self.handleSpectators(incoming, clients)
 
     def resultsTick(self, incoming, clients):
-        self.handleSpectators(incoming)
+        self.handleSpectators(incoming, clients)
 
     def summaryTick(self, incoming, clients):
-        self.handleSpectators(incoming)
+        self.handleSpectators(incoming, clients)
 
     def distributePhrase(self):
         phrase = GameRules.PHRASES[random.randint(0, len(GameRules.PHRASES) - 1)].split(" ")
@@ -145,6 +145,13 @@ class Game:
                 playerData.cards.append(card)
             self.send(self.getClientId(playerId), "DeckDeal", {"playerId": playerId, "cards": playerData.cards})
 
+    def sendPhaseUpdate(self, clients):
+        payload = {"state": self.currentPhase}
+        if self.timer > 0:
+            payload["timer"] = self.timer
+        for clientId in clients:
+            self.send(clientId, "GameStateUpdate", payload)
+
     def send(self, clientId, messageType, payload):
         self.outgoingMessages.append(Message(clientId, messageType, payload))
 
@@ -160,14 +167,29 @@ class Game:
                 return player["clientId"]
         return -1
 
-    def handleSpectators(self, incoming):
+    def handleSpectators(self, incoming, clients):
         for msg in incoming:
             if msg.messageType == "JoinRequest":
                 if self.getPlayerId(msg.clientId) >= 0:
                     # already joined as a player
                     continue
-                self.send(msg.clientId, "JoinResponse", {
-                    "playerId": -1, #spectators are not players
-                    "isSpectator": True,
-                    "isHost": False
-                })
+                elif "playerId" in msg.payload:
+                    # rejoin after lost connection
+                    for player in self.activePlayers:
+                        if player["playerId"] == msg.payload["playerId"]:
+                            player["clientId"] = msg.clientId
+                            self.send(msg.clientId, "JoinResponse", {
+                                "playerId": player["playerId"],
+                                "isSpectator": False,
+                                "isHost": True # everyone is a host for now
+                            })
+                            self.sendPhaseUpdate(clients)
+                            break
+                else:
+                    # view as a spectator
+                    self.send(msg.clientId, "JoinResponse", {
+                        "playerId": -1,
+                        "isSpectator": True,
+                        "isHost": False
+                    })
+                    self.sendPhaseUpdate(clients)

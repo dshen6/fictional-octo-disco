@@ -1,4 +1,5 @@
 import './TrollingScreen.css';
+import CountdownTimer from '../components/CountdownTimer';
 
 // View
 function TrollingScreen(props) {
@@ -11,7 +12,10 @@ function TrollingScreen(props) {
     return (
         <section className='trolling-container game-page-container'> 
             <h1>Troll time!</h1>
-            <h2>Trolls, swap your words.</h2>
+            <div>
+                <h2>Trolls, swap your words.</h2>
+                <CountdownTimer currentScreenTimer={props.currentScreenTimer}/>
+            </div>
             <PlayerPhraseList playerPhrases={playerPhrases}/>
         </section>
     )
@@ -48,7 +52,7 @@ function PhraseWordCard(props) {
     return (
         <li className='player-phrase-word'>
             <button className='word-card'>
-                <h3 className='word-card-word'>
+                <h3 className='word-card-word type-handwriting'>
                 {props.word}
                 </h3>
             </button>

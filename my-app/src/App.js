@@ -200,6 +200,7 @@ class App extends Component {
         pageComponent = 
         <PlanningScreen
           currentPlayerId = {state.currentPlayerId}
+          currentScreenTimer = {state.currentScreenTimer}
           players = {state.players}
           phrases = {state.phrases}
           cards = {state.cards}
@@ -211,6 +212,7 @@ class App extends Component {
         pageComponent = 
         <TrollingScreen
           currentPlayerId = {state.currentPlayerId}
+          currentScreenTimer = {state.currentScreenTimer}
           players = {state.players}
           phrases = {state.phrases}
           isSpectator = {state.isSpectator}

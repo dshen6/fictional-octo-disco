@@ -1,4 +1,5 @@
 import './PlanningScreen.css';
+import CountdownTimer from '../components/CountdownTimer';
 
 // View
 function PlanningScreen(props) {
@@ -10,6 +11,7 @@ function PlanningScreen(props) {
 
     return (
         <section className='planning-container text-align-center'>
+            <CountdownTimer currentScreenTimer={props.currentScreenTimer}/>
             <WordCardRow words={playerPhrase}/>
             <PlayerCardRow playerCards={props.cards}/>
         </section>
