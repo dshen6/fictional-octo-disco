@@ -1,7 +1,7 @@
 PLANNING_PHASE_TIME = 180
-TROLLING_TURN_TIME = 15
+TROLLING_TURN_TIME = 30
 VOTING_PHASE_TIME = 30
-RESULTS_PHASE_TIME = 30
+RESULTS_PHASE_TIME = 60
 
 CARDS = ["rhyme", "invert", "subvert", "swap", "pump", "dump", "troll"]
 
