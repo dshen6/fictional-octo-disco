@@ -1,20 +1,17 @@
 import './GameplayScreen.css';
 
 // View
-function GameplayScreen () {
+function GameplayScreen(props) {
     // todo: avatars carried over? colors?
     // const player_names = ['jax', 'daxter','ratchet','clank']
 
-    // todo: rename?
-    const phrase = 'Slow and steady wins the race'
-
-    let player_cards = ['Swap', 'Invert', 'Troll', 'Subvert']
+    const playerPhrase = props.phrases[props.currentPlayerId]
     // todo: timer, add message to wait for troll phase
 
     return (
         <section className='gameplay-container text-align-center'>
-            <WordCardRow phrase={phrase}/>
-            <PlayerCardRow player_cards={player_cards}/>
+            <WordCardRow words={playerPhrase}/>
+            <PlayerCardRow playerCards={props.cards}/>
         </section>
     )
 }
@@ -23,22 +20,21 @@ function GameplayScreen () {
 
 /* Prompt */
 // Break word into pieces
-function WordCardRow (props) {
+function WordCardRow(props) {
     // todo: remove any extra punctuation
-    const split_words = props.phrase.split(' ')
-    const word_cards = split_words.map(word => <WordCard word={word} key={word}/>)
+    const wordCards = props.words.map((word, i) => <WordCard word={word} key={i}/>)
     return (
       <div className='word-card-row'>
           <h1>Your phrase:</h1>
           <ul className='list-unstyled list-horizontal'>
-            {word_cards}
+            {wordCards}
           </ul>
       </div>
     );
 }
 
 // Singular word
-function WordCard (props) {
+function WordCard(props) {
     return(
         <li className='word-card-list-item'>
             <button className='word-card'>
@@ -65,21 +61,21 @@ function CardWordInput() {
 
 /* Player cards */
 // Show list of cards
-function PlayerCardRow (props) {
+function PlayerCardRow(props) {
     // todo: remove any extra punctuation
-    const player_cards = props.player_cards.map(card => <PlayerCard card={card} key={card}/>)
+    const playerCards = props.playerCards.map((card, i) => <PlayerCard card={card} key={i}/>)
     return (
-        <section class='player-card-container'>
+        <section className='player-card-container'>
             <h1>Choose a card:</h1>
             <ul className='player-card-row list-unstyled'>
-                {player_cards}
+                {playerCards}
             </ul>
         </section>
     );
 }
 
 // Singular card
-function PlayerCard (props) {
+function PlayerCard(props) {
     return(
         <li>
             <button className='player-card'>

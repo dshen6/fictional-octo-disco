@@ -25,7 +25,7 @@ function TrollingScreen () {
 /* Prompt */
 // Break word into pieces
 function PlayerPhraseList (props) {
-    const player_phrase_list = props.player_phrases.map(player_phrase => <PlayerWordCardRow player_phrase={player_phrase} key={player_phrase}/>)
+    const player_phrase_list = props.player_phrases.map((player_phrase,i) => <PlayerWordCardRow player_phrase={player_phrase} key={i}/>)
     return (
       <ol className='player-phrase-list'>
           {player_phrase_list}
@@ -37,7 +37,7 @@ function PlayerPhraseList (props) {
 function PlayerWordCardRow (props) {
     // Need to split the phrase itself
     const split_words = props.player_phrase.split(' ')
-    const word_cards = split_words.map(word => <PhraseWordCard word={word} key={word}/>)
+    const word_cards = split_words.map((word,i) => <PhraseWordCard word={word} key={i}/>)
     return(
         <li className='player-phrase'>
             <ul className='list-unstyled player-phrase-row'>

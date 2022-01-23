@@ -18,7 +18,7 @@ function LobbyScreen(props) {
 
 function PlayerIconRow(props) {
   // Map function: For name in player names, spit it out into player icon
-  const playerIcons = props.playerNames.map(name => <PlayerIcon playerName={name} key={name}/>)
+  const playerIcons = props.playerNames.map((name, i) => <PlayerIcon playerName={name} key={i}/>)
   return (
     <ul className='player-list list-unstyled list-horizontal'>
         {playerIcons}

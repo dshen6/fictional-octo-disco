@@ -84,19 +84,19 @@ class App extends Component {
       currentPlayerTrollTurnId: -1, // whose turn it is to troll, during trolling
     };
 
-    const ws = new ReconnectingWebsocket(`${getWsProtocol()}${getHost()}/socket`);
-    ws.onmessage = handleMessage.bind(this);
-    if (DEBUG) {
-      ws.onopen = (e) => {
-        console.log("opened", e);
-      }
-      ws.onclose = (e) => {
-        console.log("closed", e);
-      }
-      ws.debug = true;
-    }
+    // const ws = new ReconnectingWebsocket(`${getWsProtocol()}${getHost()}/socket`);
+    // ws.onmessage = handleMessage.bind(this);
+    // if (DEBUG) {
+    //   ws.onopen = (e) => {
+    //     console.log("opened", e);
+    //   }
+    //   ws.onclose = (e) => {
+    //     console.log("closed", e);
+    //   }
+    //   ws.debug = true;
+    // }
 
-    this.ws = ws
+    // this.ws = ws
   }
 
   // for convenience
@@ -156,28 +156,36 @@ class App extends Component {
           isHost = {state.isHost}
           isSpectator = {state.isSpectator} />
         break;
+        
       case SCREENS.Gameplay:
+        pageComponent = 
         <GameplayScreen
           currentPlayerId = {state.currentPlayerId}
           players = {state.players}
           phrases = {state.phrases}
+          cards = {state.cards}
           isSpectator = {state.isSpectator} />
+        break;
       
       case SCREENS.Trolling:
+        pageComponent = 
         <TrollingScreen
           currentPlayerId = {state.currentPlayerId}
           players = {state.players}
           phrases = {state.phrases}
           isSpectator = {state.isSpectator}
           currentPlayerTrollTurnId = {state.currentPlayerTrollTurnId} />
+        break;
       
       case SCREENS.Voting:
+        pageComponent = 
         <VotingScreen
           currentPlayerId = {state.currentPlayerId}
           players = {state.players}
           phrases = {state.phrases}
           votes = {state.votes}
           isSpectator = {state.isSpectator} />
+        break;
 
       case SCREENS.Summary:
         pageComponent = 
@@ -187,11 +195,11 @@ class App extends Component {
           phrases = {state.phrases}
           votes = {state.votes}
           isSpectator = {state.isSpectator} />
+        break;
     
       default:
         break;
     }
-    console.log(pageComponent)
     return (
       <section className='game-container'>
         {pageComponent}

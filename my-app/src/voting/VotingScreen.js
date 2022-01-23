@@ -19,7 +19,7 @@ function VotingScreen () {
 
 // List of phrases with vote option
 function PlayerPhraseList (props) {
-    const player_phrase_list = props.player_phrases.map(player_phrase => <PlayerPhrase player_phrase={player_phrase} key={player_phrase}/>)
+    const player_phrase_list = props.player_phrases.map((player_phrase,i) => <PlayerPhrase player_phrase={player_phrase} key={i}/>)
     return (
       <ul className='player-phrase-list list-unstyled'>
           {player_phrase_list}
