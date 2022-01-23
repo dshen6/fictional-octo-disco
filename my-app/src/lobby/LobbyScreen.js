@@ -1,4 +1,5 @@
 import './LobbyScreen.css';
+import React, { useState } from "react";
 
 function LobbyScreen(props) {
   const playerLimit = 4
@@ -50,18 +51,14 @@ function StartGameButton(props) {
 }
 
 function NameInput(props) {
+  const [name, setName] = useState("");
+
   return (
-    <form className='player-name-form form-horizontal-layout'>
-      <input type='text' placeholder='Enter name' onSubmit={props.onJoinRequest}/>
-      <NameInputEnter onJoinRequest={props.onJoinRequest}/>
+    <form className='player-name-form form-horizontal-layout' onSubmit={_ => props.onJoinRequest(name)}>
+      <input type='text' placeholder='Enter name' value={name} onChange={e => setName(e.target.value)}/>
+      <button className='button' type='submit'>Ready</button>
     </form>
   )
 }
   
-function NameInputEnter(onJoinRequest) {
-  return (
-    <button className='button' onClick={onJoinRequest}>Ready</button>
-  )
-}
-
 export default LobbyScreen;
