@@ -28,7 +28,7 @@ function PlayerIconRow(props) {
 
 function PlayerIcon(props) {
   return(
-    <li class='player-list-item'>
+    <li className='player-list-item'>
         <div className='player-ready-icon'>👍</div>
         <h2 className='player-text'>{props.playerName}</h2>
     </li>
