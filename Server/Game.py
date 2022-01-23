@@ -216,7 +216,7 @@ class Game:
         #reset all votes
         for playerId in self.playerData:
             self.playerData[playerId].currentVotes = 0
-        self.sendCurretVotes(clients)
+        self.sendCurrentVotes(clients)
 
     def votingTick(self, incoming, clients):
         self.handleSpectators(incoming, clients)

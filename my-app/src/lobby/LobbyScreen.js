@@ -13,8 +13,9 @@ function LobbyScreen(props) {
       <h1>Join the game!</h1>
       <PlayerIconRow playerNames={playerNames}/>
       <ReadyText readyPlayerCount={playerNames.length} playerLimit={playerLimit}/>
-      <StartGameButton onStartGame ={props.onStartGame}/>
-      <NameInput onJoinRequest={props.onJoinRequest}
+      {props.isHost && <StartGameButton onStartGame ={props.onStartGame}/> }
+      <NameInput 
+        onJoinRequest={props.onJoinRequest}
         name={name}
         setName={setName}/>
     </section>

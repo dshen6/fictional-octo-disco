@@ -43,68 +43,69 @@ function sendMessage(ws, message) {
 }
 
 function handleMessage(message) {
-  if (DEBUG) {
-    console.log("onmessage", message);
+  const msg = JSON.parse(message.data)
+  console.log('Received', msg);
+  switch (msg.messageType) {
+    case "JoinResponse":
+      this.setState({
+        currentPlayerId: msg.playerId,
+        isSpectator: msg.isSpectator,
+        isHost: msg.isHost,
+      })
+      break;
+
+    case "PlayerList":
+      this.setState({
+        players: msg.players
+      })
+      break;
+
+    case "GameStateUpdate":
+      console.log(msg.state, msg.timer)
+      this.setState({
+        currentScreen: msg.state,
+        currentScreenTimer: msg.timer,
+      })
+      break;
+    case "PhraseUpdate":
+        // update phrase for just this player
+        const phraseMap = this.state.phrases
+        phraseMap[msg.playerId] = msg.phrase
+        this.setState({
+          phrases: phraseMap
+        })
+      break;
+    case "CardConsumed":
+      // this.setState({
+      //   cardIndex
+      // })
+    case "GlobalPhraseUpdate":
+      this.setState({
+        phrases: msg.phrases
+      })
+      break;
+    case "DeckDeal":
+      if (msg.playerId === this.state.currentPlayerId) {
+        this.setState({
+          cards: msg.cards
+        })
+      }
+      break;
+    case "PlayerTurn":
+      this.setState({
+        currentPlayerTrollTurnId: msg.playerId
+      })
+      break;
+
+    case "VoteTotals":
+      this.setState({
+        votes: msg.votes
+      })
+      break;
+  
+    default:
+      break;
   }
-  const reader = new FileReader()
-
-  reader.onload = () => {
-    const msg = JSON.parse(reader.result)
-    console.log('Received', msg);
-    switch (msg.type) {
-      case "JoinResponse":
-        this.setState({
-          currentPlayerId: msg.playerId,
-          isSpectator: msg.isSpectator,
-          isHost: msg.isHost,
-        })
-        break;
-
-      case "PlayerList":
-        this.setState({
-          players: msg.players
-        })
-        break;
-
-      case "GameStateUpdate":
-        this.setState({
-          currentScreen: msg.state,
-          currentScreenTimer: msg.timer,
-        })
-        break;
-      case "PhraseUpdate":
-          // update phrase for just this player
-          this.setState({
-            phrases: msg.phrases
-          })
-        break;
-      case "CardConsumed":
-        // this.setState({
-          // cardIndex
-        // })
-      case "GlobalPhraseUpdate":
-        this.setState({
-          phrases: msg.phrases
-        })
-        break;
-      case "DeckDeal":
-        // if (msg.playerId === this.state.currentPlayerId) {
-        //   this.setState({
-        //     cards: msg.cards
-        //   })
-        // }
-        break;
-      case "PlayerTurn":
-        break;
-
-      case "VoteTotals":
-        break;
-    
-      default:
-        break;
-    }
-  }
-  reader.readAsText(message.data)
 }
 
 class App extends Component {
@@ -117,10 +118,10 @@ class App extends Component {
       currentScreenTimer: 1,
       isSpectator: false, // whether you can do stuff or just watch
       isHost: true, // only used in lobby
-      players: {}, // all players
-      currentPlayerId: 1,
+      players: {"0": "hi"}, // all players
+      currentPlayerId: 0,
       votes: {}, // Summary Screen
-      phrases: {}, // dict where key is playerId, value is their phrase as a string
+      phrases: {"0":["test", "phrase", "lol", "hi"]}, // dict where key is playerId, value is their phrase as a string
       cards: [], // all cards dealt this round
       currentPlayerTrollTurnId: -1, // whose turn it is to troll, during trolling
     };
