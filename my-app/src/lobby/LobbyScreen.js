@@ -10,8 +10,8 @@ function LobbyScreen(props) {
       <h1>Join the game!</h1>
       <PlayerIconRow playerNames={playerNames}/>
       <ReadyText readyPlayerCount={playerNames.length} playerLimit={playerLimit}/>
-      <ReadyButton />
-      <NameInput />
+      <StartGameButton onStartGame ={props.onStartGame}/>
+      <NameInput onJoinRequest={props.onJoinRequest}/>
     </section>
   )
 }
@@ -41,26 +41,26 @@ function ReadyText(props) {
   );
 }
 
-function ReadyButton() {
+function StartGameButton(props) {
   return (
     <div className='ready-section'>
-      <button className='button'>Start Game</button>
+      <button className='button' onClick={props.onStartGame}>Start Game</button>
     </div>
   )
 }
 
-function NameInput() {
+function NameInput(props) {
   return (
     <form className='player-name-form form-horizontal-layout'>
-      <input type='text' placeholder='Enter name'/>
-      <NameInputEnter />
+      <input type='text' placeholder='Enter name' onSubmit={props.onJoinRequest}/>
+      <NameInputEnter onJoinRequest={props.onJoinRequest}/>
     </form>
   )
 }
   
-function NameInputEnter() {
+function NameInputEnter(onJoinRequest) {
   return (
-    <button className='button'>Ready</button>
+    <button className='button' onClick={onJoinRequest}>Ready</button>
   )
 }
 

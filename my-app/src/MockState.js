@@ -1,6 +1,6 @@
 export default {
-    currentScreen: 'planning',
-    currentScreenTimer: 1,
+    currentScreen: 'lobby',
+    currentScreenTimer: 100,
     isSpectator: false, // whether you can do stuff or just watch
     isHost: true, // only used in lobby
     players: {"0": "JT", "1": "Someone else", "2": "jim", "3": "billobobbo"}, // all players

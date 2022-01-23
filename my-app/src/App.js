@@ -17,13 +17,13 @@ const SCREENS = {
   Summary: 'summary'
 };
 
-const SHOULD_MOCK_STATE = true;
+const SHOULD_MOCK_STATE = false;
 
 const DEBUG = process.env.NODE_ENV === 'development'
 
 function getHost() {
   if (DEBUG) {
-    return 'localhost:8000'
+    return 'localhost:8080'
   } else {
     return window.location.host
   }
@@ -38,6 +38,7 @@ function getWsProtocol() {
 }
 
 function sendMessage(ws, message) {
+  console.log("sending", JSON.stringify(message))
   ws.send(JSON.stringify(message))
 }
 
@@ -60,18 +61,34 @@ function handleMessage(message) {
         break;
 
       case "PlayerList":
+        this.setState({
+          players: msg.players
+        })
         break;
 
       case "GameStateUpdate":
         this.setState({
-          currentScreen: msg.state
+          currentScreen: msg.state,
+          currentScreenTimer: msg.timer,
         })
         break;
       case "PhraseUpdate":
+          // update phrase for just this player
+          this.setState({
+            phrases: msg.phrases
+          })
         break;
       case "GlobalPhraseUpdate":
+        this.setState({
+          phrases: msg.phrases
+        })
         break;
       case "DeckDeal":
+        // if (msg.playerId === this.state.currentPlayerId) {
+        //   this.setState({
+        //     cards: msg.cards
+        //   })
+        // }
         break;
       case "PlayerTurn":
         break;
@@ -104,19 +121,19 @@ class App extends Component {
       currentPlayerTrollTurnId: -1, // whose turn it is to troll, during trolling
     };
 
-    // const ws = new ReconnectingWebsocket(`${getWsProtocol()}${getHost()}/socket`);
-    // ws.onmessage = handleMessage.bind(this);
-    // if (DEBUG) {
-    //   ws.onopen = (e) => {
-    //     console.log("opened", e);
-    //   }
-    //   ws.onclose = (e) => {
-    //     console.log("closed", e);
-    //   }
-    //   ws.debug = true;
-    // }
+    const ws = new ReconnectingWebsocket(`${getWsProtocol()}${getHost()}/socket`);
+    ws.onmessage = handleMessage.bind(this);
+    if (DEBUG) {
+      ws.onopen = (e) => {
+        console.log("opened", e);
+      }
+      ws.onclose = (e) => {
+        console.log("closed", e);
+      }
+      ws.debug = true;
+    }
 
-    // this.ws = ws
+    this.ws = ws
   }
 
   // for convenience
@@ -175,8 +192,8 @@ class App extends Component {
           players = {state.players}
           isHost = {state.isHost}
           isSpectator = {state.isSpectator}
-          onJoinRequest = {state.onJoinRequest} 
-          onStartGame = {state.onStartGame} />
+          onJoinRequest = {this.onJoinRequest} 
+          onStartGame = {this.onStartGame} />
         break;
         
       case SCREENS.Planning:
@@ -187,7 +204,7 @@ class App extends Component {
           phrases = {state.phrases}
           cards = {state.cards}
           isSpectator = {state.isSpectator}
-          onUseCard = {state.onUseCard} />
+          onUseCard = {this.onUseCard} />
         break;
       
       case SCREENS.Trolling:
@@ -198,7 +215,7 @@ class App extends Component {
           phrases = {state.phrases}
           isSpectator = {state.isSpectator}
           currentPlayerTrollTurnId = {state.currentPlayerTrollTurnId}
-          onUseCard = {state.onUseCard} />
+          onUseCard = {this.onUseCard} />
         break;
       
       case SCREENS.Voting:
@@ -209,7 +226,7 @@ class App extends Component {
           phrases = {state.phrases}
           votes = {state.votes}
           isSpectator = {state.isSpectator}
-          onVote = {state.onVote} />
+          onVote = {this.onVote} />
         break;
 
       case SCREENS.Summary:
