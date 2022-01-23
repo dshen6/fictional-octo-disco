@@ -6,7 +6,6 @@ function TrollingScreen(props) {
     const playerPhrases = Object.keys(props.players).map(function(key){
         return props.phrases[key];
       });
-    console.log(playerPhrases.length)
     // todo: walkthrough of cards applied
 
     return (

@@ -1,5 +1,5 @@
 export default {
-    currentScreen: 'TROLLING',
+    currentScreen: 'VOTING',
     currentScreenTimer: 1,
     isSpectator: false, // whether you can do stuff or just watch
     isHost: true, // only used in lobby
