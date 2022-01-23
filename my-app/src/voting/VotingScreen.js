@@ -31,6 +31,7 @@ function PlayerPhraseList(props) {
         onSelectedPhrase={props.setSelectedPhraseIndex}
         setPlayerHasVoted={props.setPlayerHasVoted}
         selectedPhraseIndex={props.selectedPhraseIndex}
+        phraseVotes={props.votes[i]}
         />)
 
     return (
@@ -46,8 +47,10 @@ function PlayerPhrase(props) {
         props.setPlayerHasVoted(true)
         props.onSelectedPhrase(props.phraseIndex)
     }}/>
+
+    console.log(props.phraseVotes)
     
-    const playerVoteCount = [...Array(props.votes)].map((vote, i) => <VoteIcon key={i} />)
+    const playerVoteCount = [...Array(props.phraseVotes)].map((vote, i) => <VoteIcon key={i} />)
     // TODO: figure out why it still returns a checkmark if there are zero votes
 
     return(
@@ -58,6 +61,7 @@ function PlayerPhrase(props) {
 }
 
 function VoteIcon () {
+
     return (
         <span className="player-vote-icon">&#x2713;</span>
     )
