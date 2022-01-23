@@ -1,17 +1,9 @@
 PLANNING_PHASE_TIME = 180
-TROLLING_PHASE_TIME = 60
+TROLLING_TURN_TIME = 15
 VOTING_PHASE_TIME = 30
 RESULTS_PHASE_TIME = 30
 
-CARDS = [
-    "rhyme",
-    "invert",
-    "subvert",
-    "swap",
-    "pump",
-    "dump",
-    "troll"
-]
+CARDS = ["rhyme", "invert", "subvert", "swap", "pump", "dump", "troll"]
 
 PHRASES = [
     "a cat has nine lives",
