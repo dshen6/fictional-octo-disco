@@ -3,7 +3,7 @@ import './GameplayScreen.css';
 // View
 function GameplayScreen () {
     // todo: avatars carried over? colors?
-    const player_names = ['jax', 'daxter','ratchet','clank']
+    // const player_names = ['jax', 'daxter','ratchet','clank']
 
     // todo: rename?
     const phrase = 'Slow and steady wins the race'

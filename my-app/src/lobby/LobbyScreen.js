@@ -1,13 +1,15 @@
 import './LobbyScreen.css';
 
-function LobbyScreen() {
-  const player_names = ['jax', 'daxter','ratchet','clank']
-  const player_limit = 4
+function LobbyScreen(props) {
+  const playerLimit = 4
+  const playerNames = Object.keys(props.players).map(function(key){
+    return props.players[key];
+  });
   return (
     <section className='lobby-container'>
       <h1>Join the game!</h1>
-      <PlayerIconRow player_names={player_names}/>
-      <ReadyText ready_player_count='4' player_limit={player_limit}/>
+      <PlayerIconRow playerNames={playerNames}/>
+      <ReadyText readyPlayerCount={playerNames.length} playerLimit={playerLimit}/>
       <ReadyButton />
       <NameInput />
     </section>
@@ -16,10 +18,10 @@ function LobbyScreen() {
 
 function PlayerIconRow(props) {
   // Map function: For name in player names, spit it out into player icon
-  const player_icons = props.player_names.map(name => <PlayerIcon player_name={name} key={name}/>)
+  const playerIcons = props.playerNames.map(name => <PlayerIcon playerName={name} key={name}/>)
   return (
     <ul className='player-list list-unstyled list-horizontal'>
-        {player_icons}
+        {playerIcons}
     </ul>
   );
 }
@@ -28,14 +30,14 @@ function PlayerIcon(props) {
   return(
     <li class='player-list-item'>
         <div className='player-ready-icon'>👍</div>
-        <h2 className='player-text'>{props.player_name}</h2>
+        <h2 className='player-text'>{props.playerName}</h2>
     </li>
   );
 }
 
 function ReadyText(props) {
   return (
-      <h3 className='ready-text'>{props.ready_player_count}/{props.player_limit} Ready</h3>
+      <h3 className='ready-text'>{props.readyPlayerCount}/{props.playerLimit} Ready</h3>
   );
 }
 
