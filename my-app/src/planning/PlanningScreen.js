@@ -121,7 +121,7 @@ function WordCard(props) {
 function CardWordInput(props) {
     return (
         <div>
-            <form className='word-form form-horizontal-layout' onSubmit={_ => props.onSubmit(props.transformedText)}>
+            <form className='word-form' onSubmit={_ => props.onSubmit(props.transformedText)}>
                 <input type='text' placeholder='Enter word' value={props.transformedText} onChange={e => props.onTextChange(e.target.value)}/>
                 <button className='button' type='submit'>Done</button>
             </form>

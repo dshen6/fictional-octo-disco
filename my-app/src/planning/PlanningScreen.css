@@ -7,12 +7,22 @@
     width: 100%;
 }
 
-.word-card-row {
+.planning-container .word-card-row {
     padding: 32px;
 }
 
 .word-card {
+    background: lightgrey;
+    border: 1px solid gray;
+}
+
+.planning-container .word-card {
     width: 100%;
+    border-radius: .5em;
+}
+
+.word-card h2 {
+    margin: 0;
 }
 
 .word-card-word {
@@ -34,16 +44,33 @@
     overflow-x: auto;
     padding: 32px 32px 0;
     display: flex;
-
+    column-gap: 1em;
 }
 
 .player-card {
     min-width: 20vw;
     max-width: 256px;
     padding: 32px;
+    background-color: lightgrey;
+    border: 1px solid gray;
+    border-bottom: none;
+    border-radius: .5em .5em 0 0;
 }
 
-.player-card-selected {
+.player-card:not(.disabled) {
+    cursor:pointer;
+}
+
+.player-card:not(.disabled):hover {
+    background-color: whitesmoke;
+    border-color: lightgrey;
+}
+
+.player-card.disabled {
+    opacity: .5;
+}
+
+.player-card:not(.disabled).player-card-selected {
     background-color: yellow;
 }
 
