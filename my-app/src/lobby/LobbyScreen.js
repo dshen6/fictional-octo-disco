@@ -14,7 +14,7 @@ function LobbyScreen(props) {
       <PlayerIconRow playerNames={playerNames}/>
       <ReadyText readyPlayerCount={playerNames.length} playerLimit={playerLimit}/>
       {props.isHost && <StartGameButton onStartGame ={props.onStartGame}/> }
-      <NameInput 
+      <NameInput
         onJoinRequest={props.onJoinRequest}
         name={name}
         setName={setName}/>
@@ -57,7 +57,11 @@ function StartGameButton(props) {
 
 function NameInput(props) {
   return (
-    <form className='player-name-form form-horizontal-layout' onSubmit={_ => props.onJoinRequest(props.name)}>
+    <form className='player-name-form form-horizontal-layout' onSubmit={e => {
+        e.preventDefault();
+        props.onJoinRequest(props.name);
+      }
+    }>
       <input type='text' placeholder='Enter name' value={props.name} onChange={e => props.setName(e.target.value)}/>
       <button className='button' type='submit'>Ready</button>
     </form>
