@@ -62,6 +62,36 @@
     padding-bottom: 32px;
 }
 
+.player-card-row li:nth-of-type(2) .player-card{
+    -webkit-animation-delay:.5s;
+    animation-delay:.5s;
+}
+
+.player-card-row li:nth-of-type(3) .player-card{
+    -webkit-animation-delay:1s;
+    animation-delay:1s;
+}
+
+.player-card-row li:nth-of-type(4) .player-card{
+    -webkit-animation-delay:1.5s;
+    animation-delay:1.5s;
+}
+
+.player-card-row li:nth-of-type(5) .player-card{
+    -webkit-animation-delay:2s;
+    animation-delay:2s;
+}
+
+.player-card-row li:nth-of-type(6) .player-card{
+    -webkit-animation-delay:2.5s;
+    animation-delay:2.5s;
+}
+
+.player-card-row li:nth-of-type(7) .player-card{
+    -webkit-animation-delay:3s;
+    animation-delay:3s;
+}
+
 .player-card {
     min-width: 20vw;
     max-width: 256px;
@@ -72,9 +102,11 @@
     border-radius: .5em;
     background-size: cover;
     background-repeat: no-repeat;
-    opacity: .8;
+    opacity: 1;
     background-color: transparent;
-    transition: transform .25s ease-in;
+    transition: all .25s ease-in;
+    -webkit-animation: slidein 1s backwards;
+    animation: slidein 1s backwards;
 }
 
 .player-card:not(.disabled) {
@@ -82,8 +114,7 @@
 }
 
 .player-card:not(.disabled):hover {
-    opacity: 1;
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .player-card.disabled {
@@ -91,7 +122,6 @@
 }
 
 .player-card:not(.disabled).player-card-selected {
-    opacity: 1;
     outline: 4px solid greenyellow;
 }
 
@@ -122,3 +152,19 @@
 .player-card-troll {
     background-image: url(../assets/cards/troll-front.png);
 }
+
+/* CARD ANIMATIONS */
+@keyframes slidein {
+    0% {
+        margin-left:-100%;
+        transform: translate(-1000%, 0) rotate(30deg) scale(1.2);
+        box-shadow: -24px 102px 2px 1px rgba(10, 10, 50, .1);
+    }
+      
+    100% {
+        margin-left:0%;
+        transform: translate(0%, 0%) rotate(0) scale(1);
+    } 
+      
+      
+  }
