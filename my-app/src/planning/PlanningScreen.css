@@ -105,8 +105,8 @@
     opacity: 1;
     background-color: transparent;
     transition: all .25s ease-in;
-    -webkit-animation: slidein 1s backwards;
-    animation: slidein 1s backwards;
+    -webkit-animation: slidein 10s backwards;
+    animation: slidein 10s backwards;
 }
 
 .player-card:not(.disabled) {
@@ -115,6 +115,7 @@
 
 .player-card:not(.disabled):hover {
     transform: scale(1.05);
+    box-shadow: 0 4px 4px 4px rgba(10, 10, 50, .15);
 }
 
 .player-card.disabled {
@@ -157,8 +158,12 @@
 @keyframes slidein {
     0% {
         margin-left:-100%;
-        transform: translate(-1000%, 0) rotate(30deg) scale(1.2);
-        box-shadow: -24px 102px 2px 1px rgba(10, 10, 50, .1);
+        transform: translate(-1000%, -15%) rotate(30deg) scale(1.2);
+        box-shadow: -12px 12px 4px 4px rgba(10, 10, 50, .25);
+    }
+    
+    80% {
+        box-shadow: -4px 8px 4px 4px rgba(10, 10, 50, .15);
     }
       
     100% {
