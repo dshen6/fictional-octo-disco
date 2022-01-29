@@ -118,13 +118,13 @@ class App extends Component {
 
     this.state = {
       currentScreen: SCREENS.Lobby,
-      currentScreenTimer: 1,
+      currentScreenTimer: 0,
       isSpectator: false, // whether you can do stuff or just watch
-      isHost: true, // only used in lobby
+      isHost: false, // only used in lobby
       players: {}, // all players
       currentPlayerId: 0,
       votes: {}, // Summary Screen
-      phrases: {"0":["test", "phrase", "lol", "hi"]}, // dict where key is playerId, value is their phrase as a string
+      phrases: {}, // dict where key is playerId, value is their phrase as a string
       cards: [], // all cards dealt this round
       currentPlayerTrollTurnId: -1, // whose turn it is to troll, during trolling
     };
