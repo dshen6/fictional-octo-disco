@@ -105,8 +105,8 @@
     opacity: 1;
     background-color: transparent;
     transition: all .25s ease-in;
-    -webkit-animation: slidein 10s backwards;
-    animation: slidein 10s backwards;
+    -webkit-animation: slidein 1s backwards;
+    animation: slidein 1s backwards;
 }
 
 .player-card:not(.disabled) {
