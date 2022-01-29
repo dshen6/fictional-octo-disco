@@ -19,7 +19,7 @@ const SCREENS = {
   Summary: 'summary'
 };
 
-const SHOULD_MOCK_STATE = false;
+const SHOULD_MOCK_STATE = true;
 
 const DEBUG = process.env.NODE_ENV === 'development'
 

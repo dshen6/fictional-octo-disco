@@ -163,9 +163,8 @@ function PlayerCard(props) {
     let isSelected = props.isSelected ? 'player-card-selected' : null
     return(
         <li>
-            <button className={`player-card ${trollCardStatus} ${isSelected}`} onClick={props.onClick}>
+            <button className={`player-card player-card-${props.card} ${trollCardStatus} ${isSelected}`} onClick={props.onClick}>
                 <h3 className='player-card-word'>
-                {props.card}
                 </h3>
             </button>
         </li>
