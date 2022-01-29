@@ -122,7 +122,7 @@ class App extends Component {
       isSpectator: false, // whether you can do stuff or just watch
       isHost: false, // only used in lobby
       players: {}, // all players
-      currentPlayerId: 0,
+      currentPlayerId: null,
       votes: {}, // Summary Screen
       phrases: {}, // dict where key is playerId, value is their phrase as a string
       cards: [], // all cards dealt this round
@@ -159,11 +159,12 @@ class App extends Component {
   }
 
   onJoinRequest = (playerName) => {
-    this._sendMessage({
+    var payload = {
       messageType: 'JoinRequest', 
-      playerName: playerName, 
-      playerId: this.state.currentPlayerId
-    })
+      playerName: playerName,
+      // ...(this.state.currentPlayerId !== null && {playerId: this.state.currentPlayerId })
+    }
+    this._sendMessage(payload)
   }
 
   onStartGame = () => {
@@ -171,15 +172,18 @@ class App extends Component {
   }
 
   onUseCard = (cardIndex, position1, position2, playerId2, wordText, mode) => {
-    this._sendMessage({
+    var payload = {
       messageType: 'UseCard',
       cardIndex: cardIndex,
       position1: position1,
-      position2: position2,
-      playerId2: playerId2,
-      wordText: wordText,
-      mode: mode // 'delete' or 'stinky'
-    });
+    }
+    payload = {...payload,
+      ...(position2 > -1 && {position2: position2}),
+      ...(playerId2 > -1 && {playerId2: playerId2}),
+      ...(wordText.length > 0 && {wordText: wordText}),
+      ...(mode && {mode: mode}) // 'delete' or 'stinky'
+      }
+    this._sendMessage(payload);
   }
 
   onVote = (playerId) => {
@@ -221,7 +225,7 @@ class App extends Component {
           currentPlayerId = {state.currentPlayerId}
           currentScreenTimer = {state.currentScreenTimer}
           players = {state.players}
-          phrases = {state.phrases}
+          phrases = {state.phrases || {}}
           cards = {state.cards}
           isSpectator = {state.isSpectator}
           onUseCard = {this.onUseCard} />
