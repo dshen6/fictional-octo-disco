@@ -1,3 +1,4 @@
+import sys
 import json
 import time
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
@@ -12,12 +13,23 @@ ServerState = {
 }
 
 def Main():
-    print("Server starting")
+    # parse the server port
+    port = 8080
+    if len(sys.argv) > 1:
+        port = int(sys.argv[1])
 
-    server = SimpleWebSocketServer('', 8080, ClientConnection)
+    # start the server
+    print("Server starting on port " + str(port))
+    server = SimpleWebSocketServer('', port, ClientConnection)
+
+    # game loop
     game = Game()
     while ServerState["running"]:
-        #handle incoming messages
+        # restart the game if it's over
+        if game.isGameOver:
+            game = Game()
+
+        # handle incoming messages
         ServerState["incomingMessages"] = []
         server.serveonce()
 
@@ -36,7 +48,10 @@ def Main():
             payload["messageType"] = msg.messageType
             if targetPlayer in ServerState["clients"]:
                 client = ServerState["clients"][targetPlayer]
-                client.sendMessage(json.dumps(payload))
+                try:
+                    client.sendMessage(json.dumps(payload))
+                except BaseException as error:
+                    print("Error sending message: " + str(error))
         
         # sleep the thread
         time.sleep(0.1)

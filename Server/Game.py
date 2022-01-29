@@ -14,6 +14,7 @@ class Game:
         self.lastTimerBroadcast = self.lastTickTime
         self.phaseTimeUp = False
         self.playerTurn = -1
+        self.isGameOver = False
 
         self.nextPlayerId = 0
         self.activePlayers = []
@@ -140,6 +141,8 @@ class Game:
                         del playerData.deck[cardIndex]
                         self.send(msg.clientId, "CardConsumed", {"playerId": playerId, "cardIndex": cardIndex})
                         self.send(msg.clientId, "PhraseUpdate", {"playerId": playerId, "phrase": playerData.phrase})
+                    else:
+                        self.sendUseCardError(playerId, cardIndex)
         
         # handle timer
         if self.phaseTimeUp:
@@ -187,9 +190,11 @@ class Game:
                 if cardIndex < 0 or cardIndex >= len(playerData.deck):
                     continue
                 if playerData.deck[cardIndex] != "troll":
+                    self.sendUseCardError(playerId, cardIndex)
                     continue
                 otherPlayerId = msg.payload["playerId2"]
                 if not otherPlayerId in self.playerData:
+                    self.sendUseCardError(playerId, cardIndex)
                     continue
                 otherPlayerData = self.playerData[otherPlayerId]
                 success = playerData.applyToll(msg.payload["position1"], otherPlayerData, msg.payload["position2"])
@@ -198,6 +203,8 @@ class Game:
                     self.send(msg.clientId, "CardConsumed", {"playerId": playerId, "cardIndex": cardIndex})
                     self.sendGlobalPhraseUpdate()
                     self.nextTrollingTurn()
+                else:
+                    self.sendUseCardError(playerId, cardIndex)
 
         # handle timer
         if self.phaseTimeUp:
@@ -234,7 +241,7 @@ class Game:
                 self.playerData[targetPlayerId].currentVotes += 1
                 sendTotals = True
 
-        #send the updates vote counts
+        #send the updated vote counts
         if sendTotals:
             self.sendCurrentVotes(clients)
 
@@ -255,8 +262,21 @@ class Game:
     def resultsTick(self, incoming, clients):
         self.handleSpectators(incoming, clients)
 
+        #handle timer
+        if self.phaseTimeUp:
+            self.setupSummary(clients)
+
+    def setupSummary(self, clients):
+        self.currentPhase = "results"
+        self.timer = GameRules.SUMMARY_PHASE_TIME
+        self.sendPhaseUpdate(clients)
+
     def summaryTick(self, incoming, clients):
         self.handleSpectators(incoming, clients)
+
+        #handle timer
+        if self.phaseTimeUp:
+            self.isGameOver = True
 
     def distributePhrase(self):
         phrase = GameRules.PHRASES[random.randint(0, len(GameRules.PHRASES) - 1)].split(" ")
@@ -296,6 +316,11 @@ class Game:
             votes[playerId] = self.playerData[playerId].currentVotes
         for clientId in clients:
             self.send(clientId, "VoteTotals", {"votes": votes})
+    
+    def sendUseCardError(self, playerId, cardIndex):
+        clientId = self.getClientId(playerId)
+        if clientId >= 0:
+            self.send(clientId, "UseCardError", {"cardIndex": cardIndex})
 
     def send(self, clientId, messageType, payload):
         self.outgoingMessages.append(Message(clientId, messageType, payload))

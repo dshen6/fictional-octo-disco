@@ -7,12 +7,22 @@
     width: 100%;
 }
 
-.word-card-row {
+.planning-container .word-card-row {
     padding: 32px;
 }
 
 .word-card {
+    background: lightgrey;
+    border: 1px solid gray;
+}
+
+.planning-container .word-card {
     width: 100%;
+    border-radius: .5em;
+}
+
+.word-card h2 {
+    margin: 0;
 }
 
 .word-card-word {
@@ -23,6 +33,19 @@
     width: 100%;
 }
 
+.word-card-selectable {
+    cursor: pointer;
+}
+
+.word-card-selectable:hover {
+    background-color: wheat;
+}
+
+.word-card-selected {
+    background-color: green;
+}
+
+
 .player-card-container {
     margin-top: auto;
     box-sizing: border-box;
@@ -32,21 +55,70 @@
     box-sizing: border-box;
     width: 100%;
     overflow-x: auto;
+    overflow-y: visible;
     padding: 32px 32px 0;
     display: flex;
-
+    column-gap: 1em;
+    padding-bottom: 32px;
 }
 
 .player-card {
     min-width: 20vw;
     max-width: 256px;
+    min-height: calc(20vw*1.4);
+    max-height: 358.4px;
     padding: 32px;
+    border: none;
+    border-radius: .5em;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: .8;
+    background-color: transparent;
+    transition: transform .25s ease-in;
 }
 
-.player-card-selected {
-    background-color: yellow;
+.player-card:not(.disabled) {
+    cursor: pointer;
 }
 
-.word-card-selected {
-    background-color: green;
+.player-card:not(.disabled):hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.player-card.disabled {
+    opacity: .1;
+}
+
+.player-card:not(.disabled).player-card-selected {
+    opacity: 1;
+    outline: 4px solid greenyellow;
+}
+
+.player-card-dump {
+    background-image: url(../assets/cards/dump-front.png);
+}
+
+.player-card-invert {
+    background-image: url(../assets/cards/invert-front.png);
+}
+
+.player-card-pump {
+    background-image: url(../assets/cards/pump-front.png);
+}
+
+.player-card-rhyme {
+    background-image: url(../assets/cards/rhyme-front.png);
+}
+
+.player-card-subvert {
+    background-image: url(../assets/cards/subvert-front.png);
+}
+
+.player-card-swap {
+    background-image: url(../assets/cards/swap-front.png);
+}
+
+.player-card-troll {
+    background-image: url(../assets/cards/troll-front.png);
 }
