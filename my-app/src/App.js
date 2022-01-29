@@ -19,7 +19,7 @@ const SCREENS = {
   Summary: 'summary'
 };
 
-const SHOULD_MOCK_STATE = true;
+const SHOULD_MOCK_STATE = false;
 
 const DEBUG = process.env.NODE_ENV === 'development'
 
@@ -54,6 +54,7 @@ function handleMessage(message) {
         isSpectator: msg.isSpectator,
         isHost: msg.isHost,
       })
+      localStorage.setItem("playerId", msg.playerId)
       break;
 
     case "PlayerList":
@@ -63,7 +64,7 @@ function handleMessage(message) {
       break;
 
     case "GameStateUpdate":
-      console.log(msg.state, msg.timer)
+      console.log("Game State Update", msg.state, msg.timer)
       this.setState({
         currentScreen: msg.state,
         currentScreenTimer: msg.timer,
@@ -120,7 +121,7 @@ class App extends Component {
       currentScreenTimer: 1,
       isSpectator: false, // whether you can do stuff or just watch
       isHost: true, // only used in lobby
-      players: {"0": "hi"}, // all players
+      players: {}, // all players
       currentPlayerId: 0,
       votes: {}, // Summary Screen
       phrases: {"0":["test", "phrase", "lol", "hi"]}, // dict where key is playerId, value is their phrase as a string
@@ -143,16 +144,25 @@ class App extends Component {
     this.ws = ws
   }
 
+  componentDidMount() {
+    const playerIdFromLocal = localStorage.getItem("playerId")
+    if (playerIdFromLocal) {
+      this.setState({
+        currentPlayerId: playerIdFromLocal
+      });
+    }
+  }
+
   // for convenience
   _sendMessage = (message) => {
     sendMessage(this.ws, message);
   }
 
-  onJoinRequest = (playerName, playerId) => {
+  onJoinRequest = (playerName) => {
     this._sendMessage({
       messageType: 'JoinRequest', 
       playerName: playerName, 
-      playerId: playerId
+      playerId: this.state.currentPlayerId
     })
   }
 
@@ -201,7 +211,8 @@ class App extends Component {
           isHost = {state.isHost}
           isSpectator = {state.isSpectator}
           onJoinRequest = {this.onJoinRequest} 
-          onStartGame = {this.onStartGame} />
+          onStartGame = {this.onStartGame}
+          />
         break;
         
       case SCREENS.Planning:
