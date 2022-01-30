@@ -3,7 +3,7 @@ import CountdownTimer from '../components/CountdownTimer';
 import { useEffect, useState } from 'react';
 
 function PlanningScreen(props) {
-    const playerPhrase = props.phrases[props.currentPlayerId]
+    const playerPhrase = props.phrases[props.currentPlayerId] || []
 
     const [selectedCardIndex, setSelectedCardIndex] = useState(-1)
     const [selectedWordIndex1, setSelectedWordIndex1] = useState(-1)
@@ -119,13 +119,13 @@ function WordCard(props) {
 // add confirm input button
 // Input for editing cards
 function CardWordInput(props) {
+    const isSendEnabled = props.transformedText.length > 0
     return (
         <div>
-            <form className='word-form' onSubmit={_ => props.onSubmit(props.transformedText)}>
+            <form className='word-form' onSubmit={_ => isSendEnabled && props.onSubmit(props.transformedText)}>
                 <input type='text' placeholder='Enter word' value={props.transformedText} onChange={e => props.onTextChange(e.target.value)}/>
-                <button className='button' type='submit'>Done</button>
+                <button className='button' type='submit' disabled={!isSendEnabled}>Done</button>
             </form>
-        
         </div>
     )
 }
