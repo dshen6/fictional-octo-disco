@@ -13,37 +13,32 @@ function PlanningScreen(props) {
 
     const expectTwoSelections = props.cards[selectedCardIndex] === "swap" && selectedWordIndex1 > -1
     const expectTextInputAfterSingleSelect = ["rhyme", "invert", "subvert", "pump"].includes(props.cards[selectedCardIndex])
-    const isDump = props.cards[selectedCardIndex] === ["dump"] // todo
+    const isDump = props.cards[selectedCardIndex] === "dump" // todo
 
     // todo: const useCardErrorMessage = 
+    const clearSelection = function() {
+        setSelectedCardIndex(-1)
+        setSelectedWordIndex1(-1)
+        setSelectedWordIndex2(-1)
+        setStinkyIndex(-1)
+        setTransformedText("")
+    };
 
     useEffect(() => {
         // trigger swap
         if (selectedWordIndex1 > -1 && selectedWordIndex2 > -1 && expectTwoSelections) {
-            setSelectedCardIndex(-1)
-            setSelectedWordIndex1(-1)
-            setSelectedWordIndex2(-1)
-            setStinkyIndex(-1)
-            setTransformedText("")
+            clearSelection()
             props.onUseCard(selectedCardIndex, selectedWordIndex1, selectedWordIndex2, -1, "", "")
             return
         }
         // trigger dump
         if (isDump) {
             if (selectedWordIndex1 > -1) {
-                setSelectedCardIndex(-1)
-                setSelectedWordIndex1(-1)
-                setSelectedWordIndex2(-1)
-                setStinkyIndex(-1)
-                setTransformedText("")
+                clearSelection()
                 props.onUseCard(selectedCardIndex, selectedWordIndex1, -1, -1, "", "delete")
                 return
             } else if (stinkyIndex > -1) {
-                setSelectedCardIndex(-1)
-                setSelectedWordIndex1(-1)
-                setSelectedWordIndex2(-1)
-                setStinkyIndex(-1)
-                setTransformedText("")
+                clearSelection()
                 props.onUseCard(selectedCardIndex, stinkyIndex, -1, -1, "", "stinky")
                 return
             }
@@ -67,6 +62,7 @@ function PlanningScreen(props) {
                 setStinkyIndex={setStinkyIndex}
                 selectedCardIndex={selectedCardIndex}
                 onUseCard={props.onUseCard}
+                clearSelection={props.clearSelection}
                 />
             <PlayerCardRow playerCards={props.cards}
                 onSelectedCard={setSelectedCardIndex}
@@ -99,7 +95,10 @@ function WordCardRow(props) {
             }
             onTextChange = {props.setTransformedText}
             transformedText = {props.transformedText}
-            onSubmit = {_ => {props.onUseCard(props.selectedCardIndex, props.selectedWordIndex1, -1, -1, props.transformedText, "")}}
+            onSubmit = {_ => {
+                props.onUseCard(props.selectedCardIndex, props.selectedWordIndex1, -1, -1, props.transformedText, "")
+                props.clearSelection()
+            }}
         />}
     )
     return (

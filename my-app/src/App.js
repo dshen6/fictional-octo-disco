@@ -84,15 +84,13 @@ function handleMessage(message) {
       })
       break;
     case "CardConsumed":
-      // update phrase for just this player
-      const currentPhraseMap = this.state.phrases
-      const playerPhrases = currentPhraseMap[msg.playerId]
-      playerPhrases.splice(msg.cardIndex, 1)
-      currentPhraseMap[msg.playerId] = playerPhrases
-      this.setState({
-        phrases: currentPhraseMap,
-        useCardError: -1
-      })
+      if (msg.cardIndex > -1) {
+        this.state.cards.splice(msg.cardIndex, 1)
+        this.setState({
+          cards: this.state.cards,
+          useCardError: -1
+        })
+      }
       break;
     case "GlobalPhraseUpdate":
       this.setState({
