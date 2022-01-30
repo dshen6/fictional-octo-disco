@@ -79,12 +79,19 @@ function handleMessage(message) {
         })
       break;
     case "CardConsumed":
-      // this.setState({
-      //   cardIndex
-      // })
+      // update phrase for just this player
+      const currentPhraseMap = this.state.phrases
+      const playerPhrases = currentPhraseMap[msg.playerId]
+      playerPhrases.splice(msg.cardIndex, 1)
+      // phraseMap[msg.playerId] = playerPhrases
+      this.setState({
+        phrases: phraseMap
+      })
+      break;
     case "GlobalPhraseUpdate":
       this.setState({
-        phrases: msg.phrases
+        phrases: msg.phrases,
+        lockedWords: msg.lockedWords
       })
       break;
     case "DeckDeal":
@@ -123,10 +130,11 @@ class App extends Component {
       isHost: false, // only used in lobby
       players: {}, // all players
       currentPlayerId: null,
-      votes: {}, // Summary Screen
+      votes: {}, // Voting Screen
       phrases: {}, // dict where key is playerId, value is their phrase as a string
       cards: [], // all cards dealt this round
       currentPlayerTrollTurnId: -1, // whose turn it is to troll, during trolling
+      lockedWords: {}, // dict where key is playerId, value is array of word indices 
     };
 
     const ws = new ReconnectingWebsocket(`${getWsProtocol()}${getHost()}/socket`);
@@ -162,7 +170,7 @@ class App extends Component {
     var payload = {
       messageType: 'JoinRequest', 
       playerName: playerName,
-      // ...(this.state.currentPlayerId !== null && {playerId: this.state.currentPlayerId })
+      ...(this.state.currentPlayerId !== null && {playerId: this.state.currentPlayerId })
     }
     this._sendMessage(payload)
   }
@@ -240,6 +248,7 @@ class App extends Component {
           phrases = {state.phrases}
           isSpectator = {state.isSpectator}
           currentPlayerTrollTurnId = {state.currentPlayerTrollTurnId}
+          lockedWords = {state.lockedWords}
           onUseCard = {this.onUseCard} />
         break;
       
