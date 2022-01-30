@@ -311,7 +311,7 @@ class Game:
     def sendPhaseUpdate(self, clients):
         payload = {"state": self.currentPhase}
         if self.timer > 0:
-            payload["timer"] = self.timer
+            payload["timer"] = int(self.timer)
         for clientId in clients:
             self.send(clientId, "GameStateUpdate", payload)
 
