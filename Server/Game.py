@@ -16,6 +16,7 @@ class Game:
         self.phaseTimeUp = False
         self.playerTurn = -1
         self.isGameOver = False
+        self.roundIndex = 0
 
         self.nextPlayerId = 0
         self.activePlayers = []
@@ -145,6 +146,15 @@ class Game:
                         self.send(msg.clientId, "PhraseUpdate", {"playerId": playerId, "phrase": playerData.phrase})
                     else:
                         self.sendUseCardError(playerId, cardIndex)
+
+        # handle fast forward
+        validCards = 0
+        for playerId in self.playerData:
+            for card in self.playerData[playerId].deck:
+                if card != "troll":
+                    validCards += 1
+        if validCards == 0:
+            self.phaseTimeUp = True
         
         # handle timer
         if self.phaseTimeUp:
@@ -160,15 +170,16 @@ class Game:
         self.sendPhaseUpdate(clients)
 
         # next turn (or skip to voting)
-        isTrolling = self.nextTrollingTurn(clients)
+        isTrolling = self.nextTrollingTurn(clients, False)
         if not isTrolling:
             self.setupVoting(clients)
 
-    def nextTrollingTurn(self, clients):
+    def nextTrollingTurn(self, clients, tossCards):
         # toss the current player's unused troll cards
-        if self.playerTurn >= 0:
-            playerData = self.playerData[self.playerTurn]
-            playerData.deck = list(filter(lambda c: c != "troll", playerData.deck))
+        if tossCards:
+            if self.playerTurn >= 0:
+                playerData = self.playerData[self.playerTurn]
+                playerData.deck = list(filter(lambda c: c != "troll", playerData.deck))
 
         # pick a new player with at least one troll card
         possiblePlayers = []
@@ -214,13 +225,13 @@ class Game:
                     del playerData.deck[cardIndex]
                     self.send(msg.clientId, "CardConsumed", {"playerId": playerId, "cardIndex": cardIndex})
                     self.sendGlobalPhraseUpdate()
-                    self.nextTrollingTurn()
+                    self.nextTrollingTurn(clients, False)
                 else:
                     self.sendUseCardError(playerId, cardIndex)
 
         # handle timer
         if self.phaseTimeUp:
-            isTrolling = self.nextTrollingTurn(clients)
+            isTrolling = self.nextTrollingTurn(clients, True)
             if isTrolling:
                 self.timer = GameRules.TROLLING_TURN_TIME
             else:
@@ -251,6 +262,8 @@ class Game:
                 targetPlayerId = msg.payload["playerId"]
                 if not targetPlayerId in self.playerData:
                     continue
+                if targetPlayerId == playerId:
+                    continue
                 self.playerData[targetPlayerId].currentVotes += 1
                 sendTotals = True
 
@@ -278,10 +291,14 @@ class Game:
 
         #handle timer
         if self.phaseTimeUp:
-            self.setupSummary(clients)
+            self.roundIndex += 1
+            if self.roundIndex < 5:
+                self.setupPlanning(clients)
+            else:
+                self.setupSummary(clients)
 
     def setupSummary(self, clients):
-        self.currentPhase = "results"
+        self.currentPhase = "summary"
         self.timer = GameRules.SUMMARY_PHASE_TIME
         self.sendPhaseUpdate(clients)
 
