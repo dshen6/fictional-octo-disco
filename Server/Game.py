@@ -7,6 +7,7 @@ import random
 class Game:
     def __init__(self):
         self.outgoingMessages = []
+        self.knownClients = []
 
         self.currentPhase = "lobby"
         self.timer = -1
@@ -56,16 +57,19 @@ class Game:
         self.phaseTimeUp = self.timer <= 0 and lastTimer > 0
 
     def lobbyTick(self, incoming, clients):
-        sendPlayerList = False
+        self.handleNewClients(clients)
 
         # handle joining players
+        sendPlayerList = False
         for msg in incoming:
             if msg.messageType == "JoinRequest":
                 if self.getPlayerId(msg.clientId) >= 0:
                     # already joined
-                    continue
-                sendPlayerList = True
-                if not "playerId" in msg.payload:
+                    playerId = self.getPlayerId(msg.clientId)
+                    if playerId in self.playerData:
+                        self.playerData[playerId] = PlayerData(msg.payload["playerName"])
+                        sendPlayerList = True
+                elif not "playerId" in msg.payload:
                     # new player join
                     playerId = self.nextPlayerId
                     self.nextPlayerId += 1
@@ -76,6 +80,7 @@ class Game:
                         "isSpectator": False,
                         "isHost": True # everyone is a host for now
                     })
+                    sendPlayerList = True
                 else:
                     # rejoin after lost connection
                     for player in self.activePlayers:
@@ -90,11 +95,7 @@ class Game:
 
         # send player list updates to all clients
         if sendPlayerList:
-            playerNames = {}
-            for playerId in self.playerData:
-                playerNames[playerId] = self.playerData[playerId].name
-            for clientId in clients:
-                self.send(clientId, "PlayerList", {"players": playerNames})
+            self.sendPlayerList(clients)
             self.sendPhaseUpdate(clients)
         
         # handle starting the game
@@ -114,6 +115,7 @@ class Game:
         self.distributeCards(len(phrase) - 1)
 
     def planningTick(self, incoming, clients):
+        self.handleNewClients(clients)
         self.handleSpectators(incoming, clients)
 
         # handle card usage
@@ -175,6 +177,7 @@ class Game:
         return True
 
     def trollingTick(self, incoming, clients):
+        self.handleNewClients(clients)
         self.handleSpectators(incoming, clients)
 
         # handle card usage
@@ -226,6 +229,7 @@ class Game:
         self.sendCurrentVotes(clients)
 
     def votingTick(self, incoming, clients):
+        self.handleNewClients(clients)
         self.handleSpectators(incoming, clients)
 
         # handle votes
@@ -260,6 +264,7 @@ class Game:
         self.sendPhaseUpdate(clients)
 
     def resultsTick(self, incoming, clients):
+        self.handleNewClients(clients)
         self.handleSpectators(incoming, clients)
 
         #handle timer
@@ -272,6 +277,7 @@ class Game:
         self.sendPhaseUpdate(clients)
 
     def summaryTick(self, incoming, clients):
+        self.handleNewClients(clients)
         self.handleSpectators(incoming, clients)
 
         #handle timer
@@ -294,6 +300,13 @@ class Game:
                 card = GameRules.CARDS[random.randint(0, len(GameRules.CARDS) - 1)]
                 playerData.deck.append(card)
             self.send(self.getClientId(playerId), "DeckDeal", {"playerId": playerId, "cards": playerData.deck})
+
+    def sendPlayerList(self, clients):
+        playerNames = {}
+        for playerId in self.playerData:
+            playerNames[playerId] = self.playerData[playerId].name
+        for clientId in clients:
+            self.send(clientId, "PlayerList", {"players": playerNames})
 
     def sendPhaseUpdate(self, clients):
         payload = {"state": self.currentPhase}
@@ -336,6 +349,15 @@ class Game:
             if player["playerId"] == playerId:
                 return player["clientId"]
         return -1
+
+    def handleNewClients(self, clients):
+        sendPlayerList = False
+        for clientId in clients:
+            if not clientId in self.knownClients:
+                sendPlayerList = True
+        self.knownClients = clients.copy()
+        if sendPlayerList:
+            self.sendPlayerList(clients)
 
     def handleSpectators(self, incoming, clients):
         for msg in incoming:
