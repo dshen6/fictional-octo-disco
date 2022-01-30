@@ -165,6 +165,12 @@ class Game:
             self.setupVoting(clients)
 
     def nextTrollingTurn(self, clients):
+        # toss the current player's unused troll cards
+        if self.playerTurn >= 0:
+            playerData = self.playerData[self.playerTurn]
+            playerData.deck = list(filter(lambda c: c != "troll", playerData.deck))
+
+        # pick a new player with at least one troll card
         possiblePlayers = []
         for playerId in self.playerData:
             if "troll" in self.playerData[playerId].deck:
@@ -172,8 +178,11 @@ class Game:
         if len(possiblePlayers) == 0:
             return False
         self.playerTurn = possiblePlayers[random.randint(0, len(possiblePlayers) - 1)]
+
+        # notify all clients
         for clientId in clients:
             self.send(clientId, "PlayerTurn", {"playerId": self.playerTurn})
+        
         return True
 
     def trollingTick(self, incoming, clients):
@@ -251,7 +260,7 @@ class Game:
 
         # handle timer
         if self.phaseTimeUp:
-            self.setupResults()
+            self.setupResults(clients)
 
     def setupResults(self, clients):
         # apply votes to multi-round totals
@@ -316,12 +325,14 @@ class Game:
             self.send(clientId, "GameStateUpdate", payload)
 
     def sendGlobalPhraseUpdate(self, clients):
-        content = { }
+        phrases = { }
+        lockedWords = { }
         for playerId in self.playerData:
             playerData = self.playerData[playerId]
-            content[playerId] = playerData.phrase
+            phrases[playerId] = playerData.phrase
+            lockedWords[playerId] = playerData.lockedIndexes
         for clientId in clients:
-            self.send(clientId, "GlobalPhraseUpdate", {"phrases": content})
+            self.send(clientId, "GlobalPhraseUpdate", {"phrases": phrases, "lockedWords":lockedWords})
 
     def sendCurrentVotes(self, clients):
         votes = { }
