@@ -39,7 +39,11 @@ def Main():
             players.append(client)
 
         # run the game logic
-        outgoing = game.tick(ServerState["incomingMessages"], players)
+        outgoing = []
+        try:
+            outgoing = game.tick(ServerState["incomingMessages"], players)
+        except BaseException as error:
+            print("Error in game tick: " + str(error))
 
         # send outgoing messages
         for msg in outgoing:
