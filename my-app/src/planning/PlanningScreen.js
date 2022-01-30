@@ -15,6 +15,8 @@ function PlanningScreen(props) {
     const expectTextInputAfterSingleSelect = ["rhyme", "invert", "subvert", "pump"].includes(props.cards[selectedCardIndex])
     const isDump = props.cards[selectedCardIndex] === ["dump"] // todo
 
+    // todo: const useCardErrorMessage = 
+
     useEffect(() => {
         // trigger swap
         if (selectedWordIndex1 > -1 && selectedWordIndex2 > -1 && expectTwoSelections) {
@@ -97,11 +99,7 @@ function WordCardRow(props) {
             }
             onTextChange = {props.setTransformedText}
             transformedText = {props.transformedText}
-            onSubmit = {e => {
-                e.preventDefault && 
-                props.onUseCard(props.selectedCardIndex, props.selectedWordIndex1, -1, -1, props.transformedText, "")
-                }
-            }
+            onSubmit = {_ => {props.onUseCard(props.selectedCardIndex, props.selectedWordIndex1, -1, -1, props.transformedText, "")}}
         />}
     )
     return (
@@ -141,7 +139,13 @@ function CardWordInput(props) {
     const isSendEnabled = props.transformedText.length > 0
     return (
         <div>
-            <form className='word-form' onSubmit={e => isSendEnabled && e.preventDefault() && props.onSubmit(props.transformedText)}>
+            <form className='word-form' onSubmit={e => {
+                e.preventDefault();
+                if (isSendEnabled) {
+                    props.onSubmit(props.transformedText);
+                }
+            }
+            }>
                 <input type='text' placeholder='Enter word' value={props.transformedText} onChange={e => props.onTextChange(e.target.value)}/>
                 <button className='button' type='submit' disabled={!isSendEnabled}>Done</button>
             </form>

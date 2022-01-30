@@ -13,7 +13,6 @@ function TrollingScreen(props) {
     // todo: walkthrough of cards applied
 
     useEffect(() => {
-        
         const areSelectedPlayersValid = selectedPlayerId1 !== selectedPlayerId2 && (selectedPlayerId1 === props.currentPlayerId || selectedPlayerId2 === props.currentPlayerId);
         const currentPlayerWordIndex = selectedPlayerId1 === props.currentPlayerId ? selectedWordIndex1 : selectedWordIndex2;
         const trolledPlayerWordIndex = selectedPlayerId1 === props.currentPlayerId ? selectedWordIndex2 : selectedWordIndex1;
@@ -50,7 +49,8 @@ function TrollingScreen(props) {
                 setSelectedPlayerId2={setSelectedPlayerId2}
                 selectedPlayerId1={selectedPlayerId1}
                 selectedPlayerId2={selectedPlayerId2}
-                enabled={isMyTurnToTroll}/>
+                enabled={isMyTurnToTroll}
+                lockedWords={props.lockedWords}/>
         </section>
     )
 }
@@ -70,7 +70,8 @@ function PlayerPhraseList(props) {
             setSelectedPlayerId2={props.setSelectedPlayerId2}
             selectedPlayerId1={props.selectedPlayerId1}
             selectedPlayerId2={props.selectedPlayerId2}
-            enabled={props.enabled}/>
+            enabled={props.enabled}
+            lockedWords={props.lockedWords}/>
     })
     return (
       <ol className='player-phrase-list'>
@@ -91,13 +92,15 @@ function PlayerWordCardRow(props) {
                 props.setSelectedPlayerId2(props.playerId)
             }
         };
+        const lockedWordIndices = props.lockedWords[props.playerId] || []
+        const isLocked = lockedWordIndices.includes(i)
         const isSelected = (props.playerId === props.selectedPlayerId1 && props.selectedWordIndex1 === i) || 
         (props.playerId === props.selectedPlayerId2 && props.selectedWordIndex2 === i)
         return <PhraseWordCard word={word} 
             key={i}
             onClick= {onClick}
             isSelected= {isSelected}
-            enabled= {props.enabled} />;
+            enabled= {props.enabled && !isLocked} />;
     });
     return(
         <li className='player-phrase'>

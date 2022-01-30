@@ -18,5 +18,6 @@ export default {
             }, // dict where key is playerId, value is their phrase as a string
     cards: ["troll", "swap", "subvert", "swap"], // all cards dealt this round
     currentPlayerTrollTurnId: "0", // whose turn it is to troll, during trolling
-    lockedWords: { "0": [1, 2, 3] } // dict where key is playerId, value is array of word indices 
+    lockedWords: { "0": [1, 2, 3] }, // dict where key is playerId, value is array of word indices 
+    useCardError: 1 // index of card that was used incorrectly, -1 if none
 }
