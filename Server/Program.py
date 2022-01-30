@@ -12,12 +12,7 @@ ServerState = {
     "nextClientId": 0
 }
 
-def Main():
-    # parse the server port
-    port = 8080
-    if len(sys.argv) > 1:
-        port = int(sys.argv[1])
-
+def Run(port):
     # start the server
     print("Server starting on port " + str(port))
     server = SimpleWebSocketServer('', port, ClientConnection)
@@ -98,4 +93,8 @@ class ClientConnection(WebSocket):
         return clientId
 
 if __name__ == "__main__":
-    Main()
+    # parse the server port
+    port = 8080
+    if len(sys.argv) > 1:
+        port = int(sys.argv[1])
+    Run(port)
