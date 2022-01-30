@@ -13,22 +13,37 @@ function PlanningScreen(props) {
 
     const expectTwoSelections = props.cards[selectedCardIndex] === "swap" && selectedWordIndex1 > -1
     const expectTextInputAfterSingleSelect = ["rhyme", "invert", "subvert", "pump"].includes(props.cards[selectedCardIndex])
-    const isDump = props.cards[selectedCardIndex] === ["dump"] // todo
+    const isDump = props.cards[selectedCardIndex] === "dump" // todo
+
+    // todo: const useCardErrorMessage = 
+    const clearSelection = function() {
+        setSelectedCardIndex(-1)
+        setSelectedWordIndex1(-1)
+        setSelectedWordIndex2(-1)
+        setStinkyIndex(-1)
+        setTransformedText("")
+    };
 
     useEffect(() => {
         // trigger swap
         if (selectedWordIndex1 > -1 && selectedWordIndex2 > -1 && expectTwoSelections) {
+            clearSelection()
             props.onUseCard(selectedCardIndex, selectedWordIndex1, selectedWordIndex2, -1, "", "")
+            return
         }
         // trigger dump
         if (isDump) {
             if (selectedWordIndex1 > -1) {
+                clearSelection()
                 props.onUseCard(selectedCardIndex, selectedWordIndex1, -1, -1, "", "delete")
+                return
             } else if (stinkyIndex > -1) {
+                clearSelection()
                 props.onUseCard(selectedCardIndex, stinkyIndex, -1, -1, "", "stinky")
+                return
             }
         }
-    })
+    });
 
     return (
         <section className='planning-container text-align-center'>
@@ -47,6 +62,7 @@ function PlanningScreen(props) {
                 setStinkyIndex={setStinkyIndex}
                 selectedCardIndex={selectedCardIndex}
                 onUseCard={props.onUseCard}
+                clearSelection={props.clearSelection}
                 />
             <PlayerCardRow playerCards={props.cards}
                 onSelectedCard={setSelectedCardIndex}
@@ -64,7 +80,7 @@ function PlanningScreen(props) {
 function WordCardRow(props) {
     const wordCards = props.words.map((word, i) => {
         const isAlreadySelected = props.selectedWordIndex1 === i || props.selectedWordIndex2 === i
-        const anotherCardSelectedAndExpectingAnother = props.expectTwoSelections && props.selectedWordIndex1 != i
+        const anotherCardSelectedAndExpectingAnother = props.expectTwoSelections && props.selectedWordIndex1 !== i
         return <WordCard word={word} key={i}
             isSelected={isAlreadySelected}
             showInput={props.expectTextInputAfterSingleSelect && isAlreadySelected}
@@ -79,10 +95,10 @@ function WordCardRow(props) {
             }
             onTextChange = {props.setTransformedText}
             transformedText = {props.transformedText}
-            onSubmit = {e => {
+            onSubmit = {_ => {
                 props.onUseCard(props.selectedCardIndex, props.selectedWordIndex1, -1, -1, props.transformedText, "")
-            }
-            }
+                props.clearSelection()
+            }}
         />}
     )
     return (
@@ -122,7 +138,13 @@ function CardWordInput(props) {
     const isSendEnabled = props.transformedText.length > 0
     return (
         <div>
-            <form className='word-form' onSubmit={_ => isSendEnabled && props.onSubmit(props.transformedText)}>
+            <form className='word-form' onSubmit={e => {
+                e.preventDefault();
+                if (isSendEnabled) {
+                    props.onSubmit(props.transformedText);
+                }
+            }
+            }>
                 <input type='text' placeholder='Enter word' value={props.transformedText} onChange={e => props.onTextChange(e.target.value)}/>
                 <button className='button' type='submit' disabled={!isSendEnabled}>Done</button>
             </form>
@@ -144,7 +166,7 @@ function PlayerCardRow(props) {
                     props.setTransformedText("")
                 }
             }}
-            isSelected={i == props.selectedCardIndex}/>)
+            isSelected={i === props.selectedCardIndex}/>)
 
     return (
         <section className='player-card-container'>
@@ -159,7 +181,7 @@ function PlayerCardRow(props) {
 
 // Singular card
 function PlayerCard(props) {
-    let trollCardStatus = props.card == 'troll' ? 'disabled': null
+    let trollCardStatus = props.card === 'troll' ? 'disabled': null
     let isSelected = props.isSelected ? 'player-card-selected' : null
     return(
         <li>

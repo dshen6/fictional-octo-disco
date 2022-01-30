@@ -19,11 +19,15 @@ function TrollingScreen(props) {
         const isValidSwap = selectedWordIndex1 > -1 && selectedWordIndex2 > -1 && areSelectedPlayersValid;
         const trolledPlayerId = selectedPlayerId1 === props.currentPlayerId ? selectedPlayerId2 : selectedPlayerId1;
         if (isValidSwap) {
+            setSelectedWordIndex1(-1)
+            setSelectedWordIndex2(-1)
+            setSelectedPlayerId1(-1)
+            setSelectedPlayerId2(-1)
             props.onUseCard(props.selectedCardIndex, currentPlayerWordIndex, trolledPlayerWordIndex, trolledPlayerId, "", "")
         }
     });
 
-    const isMyTurnToTroll = props.currentPlayerTrollTurnId === props.currentPlayerUserId;
+    const isMyTurnToTroll = props.currentPlayerTrollTurnId === props.currentPlayerId;
     const nameOfTrollingPlayer = props.players[props.currentPlayerTrollTurnId];
     const helperText = isMyTurnToTroll ? 
         "It's your turn to troll a player. Pick one word from any other player, and swap with one of your words." :
@@ -44,7 +48,9 @@ function TrollingScreen(props) {
                 setSelectedPlayerId1={setSelectedPlayerId1}
                 setSelectedPlayerId2={setSelectedPlayerId2}
                 selectedPlayerId1={selectedPlayerId1}
-                selectedPlayerId2={selectedPlayerId2}/>
+                selectedPlayerId2={selectedPlayerId2}
+                enabled={isMyTurnToTroll}
+                lockedWords={props.lockedWords}/>
         </section>
     )
 }
@@ -63,7 +69,9 @@ function PlayerPhraseList(props) {
             setSelectedPlayerId1={props.setSelectedPlayerId1}
             setSelectedPlayerId2={props.setSelectedPlayerId2}
             selectedPlayerId1={props.selectedPlayerId1}
-            selectedPlayerId2={props.selectedPlayerId2}/>
+            selectedPlayerId2={props.selectedPlayerId2}
+            enabled={props.enabled}
+            lockedWords={props.lockedWords}/>
     })
     return (
       <ol className='player-phrase-list'>
@@ -84,9 +92,15 @@ function PlayerWordCardRow(props) {
                 props.setSelectedPlayerId2(props.playerId)
             }
         };
+        const lockedWordIndices = props.lockedWords[props.playerId] || []
+        const isLocked = lockedWordIndices.includes(i)
+        const isSelected = (props.playerId === props.selectedPlayerId1 && props.selectedWordIndex1 === i) || 
+        (props.playerId === props.selectedPlayerId2 && props.selectedWordIndex2 === i)
         return <PhraseWordCard word={word} 
             key={i}
-            onClick= {onClick} />;
+            onClick= {onClick}
+            isSelected= {isSelected}
+            enabled= {props.enabled && !isLocked} />;
     });
     return(
         <li className='player-phrase'>
@@ -99,11 +113,10 @@ function PlayerWordCardRow(props) {
 
 // Singular word in phrase
 function PhraseWordCard(props) {
-    // TODO: swap mechanic
-
+    const isSelectedClassName = props.isSelected ? 'word-card-selected' : ''
     return (
         <li className='player-phrase-word'>
-            <button className='word-card' onClick={props.onClick}>
+            <button className={`word-card ${isSelectedClassName}`} onClick={props.onClick} disabled={!props.enabled}>
                 <h3 className='word-card-word type-handwriting'>
                 {props.word}
                 </h3>

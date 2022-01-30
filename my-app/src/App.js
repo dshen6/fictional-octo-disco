@@ -19,7 +19,7 @@ const SCREENS = {
   Summary: 'summary'
 };
 
-const SHOULD_MOCK_STATE = true;
+const SHOULD_MOCK_STATE = false;
 
 const DEBUG = process.env.NODE_ENV === 'development'
 
@@ -78,13 +78,24 @@ function handleMessage(message) {
           phrases: phraseMap
         })
       break;
+    case "UseCardError":
+      this.setState({
+        useCardError: msg.cardIndex
+      })
+      break;
     case "CardConsumed":
-      // this.setState({
-      //   cardIndex
-      // })
+      if (msg.cardIndex > -1) {
+        this.state.cards.splice(msg.cardIndex, 1)
+        this.setState({
+          cards: this.state.cards,
+          useCardError: -1
+        })
+      }
+      break;
     case "GlobalPhraseUpdate":
       this.setState({
-        phrases: msg.phrases
+        phrases: msg.phrases,
+        lockedWords: msg.lockedWords
       })
       break;
     case "DeckDeal":
@@ -123,10 +134,12 @@ class App extends Component {
       isHost: false, // only used in lobby
       players: {}, // all players
       currentPlayerId: null,
-      votes: {}, // Summary Screen
+      votes: {}, // Voting Screen
       phrases: {}, // dict where key is playerId, value is their phrase as a string
       cards: [], // all cards dealt this round
       currentPlayerTrollTurnId: -1, // whose turn it is to troll, during trolling
+      lockedWords: {}, // dict where key is playerId, value is array of word indices 
+      useCardError: -1, // index of card that was used incorrectly, -1 if none
     };
 
     const ws = new ReconnectingWebsocket(`${getWsProtocol()}${getHost()}/socket`);
@@ -144,15 +157,6 @@ class App extends Component {
     this.ws = ws
   }
 
-  componentDidMount() {
-    const playerIdFromLocal = localStorage.getItem("playerId")
-    if (playerIdFromLocal) {
-      this.setState({
-        currentPlayerId: playerIdFromLocal
-      });
-    }
-  }
-
   // for convenience
   _sendMessage = (message) => {
     sendMessage(this.ws, message);
@@ -162,7 +166,7 @@ class App extends Component {
     var payload = {
       messageType: 'JoinRequest', 
       playerName: playerName,
-      // ...(this.state.currentPlayerId !== null && {playerId: this.state.currentPlayerId })
+      // ...(localStorage.getItem("playerId") !== null && {playerId: localStorage.getItem("playerId") })
     }
     this._sendMessage(payload)
   }
@@ -228,6 +232,7 @@ class App extends Component {
           phrases = {state.phrases || {}}
           cards = {state.cards}
           isSpectator = {state.isSpectator}
+          useCardError = {state.useCardError}
           onUseCard = {this.onUseCard} />
         break;
       
@@ -240,6 +245,8 @@ class App extends Component {
           phrases = {state.phrases}
           isSpectator = {state.isSpectator}
           currentPlayerTrollTurnId = {state.currentPlayerTrollTurnId}
+          lockedWords = {state.lockedWords}
+          useCardError = {state.useCardError}
           onUseCard = {this.onUseCard} />
         break;
       
