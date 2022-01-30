@@ -27,7 +27,7 @@ class PlayerData:
         if replacement == "":
             return False
         firstLetter = self.phrase[wordIndex][0]
-        lastLetter = self.phrase[wordIndex][len(self.phrase) - 1]
+        lastLetter = self.phrase[wordIndex][len(self.phrase[wordIndex]) - 1]
         if replacement[0] != firstLetter or replacement[len(replacement) - 1] != lastLetter:
             return False
         self.phrase[wordIndex] = replacement.lower()
