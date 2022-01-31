@@ -68,7 +68,9 @@ function NameInput(props) {
   return (
     <form className='player-name-form form-horizontal-layout' onSubmit={e => {
         e.preventDefault();
-        props.onJoinRequest(props.name);
+        if (props.name.length > 0) {
+          props.onJoinRequest(props.name);
+        }
       }
     }>
       <input type='text' placeholder='Enter name' value={props.name} onChange={e => props.setName(e.target.value)}/>
