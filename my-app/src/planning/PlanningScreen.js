@@ -115,9 +115,10 @@ function WordCardRow(props) {
 function WordCard(props) {
     const selectableClassName = props.isSelectable ? 'word-card-selectable' : ''
     const isSelectedClassName = props.isSelected ? 'word-card-selected' : ''
+    const isTextChangeClassName = props.showInput ? 'word-card-replace' : ''
     return(
         <li className='word-card-list-item'>
-            <div className={`word-card ${selectableClassName} ${isSelectedClassName}`} onClick={props.onClick}>
+            <div className={`word-card ${selectableClassName} ${isSelectedClassName} ${isTextChangeClassName}`} onClick={props.onClick}>
                 <h2 className='word-card-word type-handwriting'>
                 {props.word}
                 {props.showInput && 

@@ -25,8 +25,8 @@
     margin: 0;
 }
 
-.word-card-word {
-
+.word-form {
+    padding-bottom: 8px;
 }
 
 .word-card input {
@@ -50,6 +50,11 @@
     color: #999;
 }
 
+.word-form .button {
+    font-size: 16px;
+    padding: 8px 16px;
+}
+
 .word-card-selectable {
     cursor: pointer;
 }
@@ -62,7 +67,7 @@
     background-color: green;
 }
 
-.word-card-selected .word-card-word {
+.word-card-replace .word-card-word {
     font-size: 16px;
     text-decoration: line-through;
 }

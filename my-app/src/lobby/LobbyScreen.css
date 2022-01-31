@@ -1,17 +1,48 @@
-.ready-btn {
-    text-align: center;
-}
-
 .lobby-container {
     text-align: center;
 }
 
-.player-name-form {
-    padding: 32px;
+.lobby-container .player-list {
+    margin-bottom: 32px;
 }
 
-.current-player {
-    color:green;
+.lobby-container .player-list-item {
+    border: 4px dotted #333;
+    padding: 24px;
+}
+
+.lobby-container .player-list-item .player-text {
+    margin: 0;
+    font-size: 1.25em;
+}
+
+.player-ready-icon {
+    padding: 4px 12px;
+    background: rgb(53, 119, 108);
+    border-radius: 64px;
+    display: inline-block;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.lobby-container .player-list-item.current-player {
+    border-color:rgb(53, 119, 108);
+}
+
+.current-player .player-text::after {
+    content: ' (You!)';
+    font-weight: 300;
+    font-size: 16px;
+    display: block;
+}
+
+.ready-text {
+    font-weight: 300;
+    margin-bottom: 32px;
+}
+
+.player-name-form {
+    padding: 32px;
 }
 
 .player-name-form input[type='text'] {
