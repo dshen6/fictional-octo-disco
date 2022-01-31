@@ -27,7 +27,7 @@
 
 .word-card:disabled {
     background: none;
-    color: black;
+    color: #f5f5f5;
     border: none;
     padding: .25em;
 }
