@@ -63,6 +63,7 @@ function PlanningScreen(props) {
                 selectedCardIndex={selectedCardIndex}
                 onUseCard={props.onUseCard}
                 clearSelection={props.clearSelection}
+                selectedCardIndex={selectedCardIndex}
                 />
             <PlayerCardRow playerCards={props.cards}
                 onSelectedCard={setSelectedCardIndex}
@@ -93,6 +94,7 @@ function WordCardRow(props) {
                     }
                 }
             }
+            isSelectable={props.selectedCardIndex > -1}
             onTextChange = {props.setTransformedText}
             transformedText = {props.transformedText}
             onSubmit = {_ => {

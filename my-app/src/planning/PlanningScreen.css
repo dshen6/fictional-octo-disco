@@ -60,10 +60,10 @@
 }
 
 .word-card-selectable:hover {
-    background-color: wheat;
+    background-color: #666;
 }
 
-.word-card-selected {
+.word-card-selected, .word-card-selected:hover {
     background-color: green;
 }
 
