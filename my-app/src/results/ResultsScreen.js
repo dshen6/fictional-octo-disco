@@ -3,22 +3,26 @@ import './ResultsScreen.css';
 // View
 function ResultsScreen(props) {
     let mostVotes = 0
-    let proposedWinner = {}
 
     Object.entries(props.votes).forEach( entry => {
         const [user, votes] = entry
 
         if (votes > mostVotes) {
             mostVotes = votes
-            proposedWinner = Object.entries(props.votes)[user]
         }
     })
 
-    // TODO: tie scenarios
+    let winningPlayerIds = []
+    Object.entries(props.votes).forEach( entry => {
+        const [user, votes] = entry
 
-    const finalWinner = proposedWinner
-    const winnerName = props.players[proposedWinner[0]]
-    const winningPhrase = props.phrases[proposedWinner[0]].join(' ')
+        if (votes === mostVotes) {
+            winningPlayerIds.push(user)
+        }
+    })
+
+    const winnerName = props.players[winningPlayerIds[0]]
+    const winningPhrase = props.phrases[winningPlayerIds[0]].join(' ')
 
     return (
         <section className='results-container text-align-center game-page-container'>

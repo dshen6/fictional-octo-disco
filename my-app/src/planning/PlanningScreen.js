@@ -145,7 +145,7 @@ function CardWordInput(props) {
                 }
             }
             }>
-                <input type='text' placeholder='Enter word' value={props.transformedText} onChange={e => props.onTextChange(e.target.value)}/>
+                <input autoFocus type='text' placeholder='Enter word' value={props.transformedText} onChange={e => props.onTextChange(e.target.value)}/>
                 <button className='button' type='submit' disabled={!isSendEnabled}>Done</button>
             </form>
         </div>

@@ -73,7 +73,7 @@ function NameInput(props) {
         }
       }
     }>
-      <input type='text' placeholder='Enter name' value={props.name} onChange={e => props.setName(e.target.value)}/>
+      <input autoFocus type='text' placeholder='Enter name' value={props.name} onChange={e => props.setName(e.target.value)}/>
       <button className='button' type='submit'>Ready</button>
     </form>
   )

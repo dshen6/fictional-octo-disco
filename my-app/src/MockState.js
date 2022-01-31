@@ -1,10 +1,10 @@
 export default {
-    currentScreen: 'voting',
+    currentScreen: 'lobby',
     currentScreenTimer: 100,
     isSpectator: false, // whether you can do stuff or just watch
     isHost: true, // only used in lobby
-    players: {"0": "JT", "1": "Someone else", "2": "jim", "3": "billobobbo"}, // all players
-    currentPlayerId: "0",
+    players: {"0": "JT", "1": "Someone else", "2": "jim"}, // all players
+    currentPlayerId: "3",
     votes: {
         "0": 2,
         "1": 1,
