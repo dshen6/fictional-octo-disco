@@ -29,14 +29,14 @@ def Run(port):
         server.serveonce()
 
         # determine all active player ids
-        players = []
+        clients = []
         for client in ServerState["clients"]:
-            players.append(client)
+            clients.append(client)
 
         # run the game logic
         outgoing = []
         try:
-            outgoing = game.tick(ServerState["incomingMessages"], players)
+            outgoing = game.tick(ServerState["incomingMessages"], clients)
         except BaseException as error:
             print("Error in game tick: " + str(error))
 
@@ -85,12 +85,11 @@ class ClientConnection(WebSocket):
             print("Error on disconnect: " + str(error))
     
     def getClientId(self):
-        clientId = -1
         clients = ServerState["clients"]
         for clientId in clients:
             if clients[clientId] == self:
-                clientId = clientId
-        return clientId
+                return clientId
+        return -1
 
 if __name__ == "__main__":
     # parse the server port

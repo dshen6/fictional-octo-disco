@@ -9,5 +9,14 @@ CARDS = ["rhyme", "invert", "subvert", "swap", "pump", "dump", "troll"]
 PHRASES = [
     "a cat has nine lives",
     "slow and steady wins the race",
-    "a rolling stone gathers no moss"
+    "a rolling stone gathers no moss",
+    "a bird in the hand is worth two in the bush",
+    "a penny saved is a penny earned",
+    "a picture is worth a thousand words",
+    "actions speak louder than words",
+    "add insult to injury",
+    "birds of a feather flock together",
+    "every cloud has a silver lining",
+    "the early bird gets the worm",
+    "the elephant in the room"
 ]
