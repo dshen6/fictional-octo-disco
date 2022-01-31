@@ -59,7 +59,7 @@ function ReadyText(props) {
 function StartGameButton(props) {
   return (
     <div className='ready-section'>
-      <button className='button' onClick={props.onStartGame}>Start Game</button>
+      <button className='button' onClick={props.onStartGame}>Start game</button>
     </div>
   )
 }

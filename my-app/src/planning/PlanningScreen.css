@@ -12,8 +12,8 @@
 }
 
 .word-card {
-    background: lightgrey;
-    border: 1px solid gray;
+    background: #333333;
+    border: none;
 }
 
 .planning-container .word-card {
@@ -33,6 +33,23 @@
     width: 100%;
 }
 
+.word-card input[type="text"] {
+    background: none;
+    padding: 6px 0;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid black;
+    font-size: 16px;
+    text-align: center;
+    outline: 1px dotted;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+.word-card input[type="text"]::placeholder {
+    color: #999;
+}
+
 .word-card-selectable {
     cursor: pointer;
 }
@@ -45,6 +62,10 @@
     background-color: green;
 }
 
+.word-card-selected .word-card-word {
+    font-size: 16px;
+    text-decoration: line-through;
+}
 
 .player-card-container {
     margin-top: auto;
