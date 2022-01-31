@@ -44,6 +44,19 @@ function sendMessage(ws, message) {
   ws.send(JSON.stringify(message))
 }
 
+function setPlayerIdInLocalStorage(currentPlayerId) {
+  if (this.state.currentPlayerId === null) { // we lost connection, reconnecting
+    const [mostRecentConfirmTimestampMs, currentPlayerId] = dateAndCurrentPlayerId.split(";")
+    if (Date.now() - mostRecentConfirmTimestampMs < 30 * 1000) { // got a valid game state update, less than 30 seconds ago
+      console.log("here, sending join request")
+      // this.onJoinRequest(null, currentPlayerId)
+    }
+  }
+  const now = Date.now();
+  const dateAndCurrentPlayerId = now + ";" + currentPlayerId;
+  localStorage.setItem("mostRecentConfirmedCurrentPlayerId", dateAndCurrentPlayerId)
+}
+
 function handleMessage(message) {
   const msg = JSON.parse(message.data)
   console.log('Received', msg);
@@ -54,7 +67,9 @@ function handleMessage(message) {
         isSpectator: msg.isSpectator,
         isHost: msg.isHost,
       })
-      localStorage.setItem("playerId", msg.playerId)
+      if (msg.playerId) {
+        setPlayerIdInLocalStorage(msg.playerId)
+      }
       break;
 
     case "PlayerList":
@@ -64,11 +79,14 @@ function handleMessage(message) {
       break;
 
     case "GameStateUpdate":
-      console.log("Game State Update", msg.state, msg.timer)
       this.setState({
         currentScreen: msg.state,
         currentScreenTimer: msg.timer,
       })
+      if (msg.currentPlayerId) {
+        setPlayerIdInLocalStorage(msg.currentPlayerId)
+      }
+
       break;
     case "PhraseUpdate":
         // update phrase for just this player
@@ -133,7 +151,7 @@ class App extends Component {
       isSpectator: false, // whether you can do stuff or just watch
       isHost: false, // only used in lobby
       players: {}, // all players
-      currentPlayerId: null,
+      currentPlayerId: null, // only set in JoinResponse
       votes: {}, // Voting Screen
       phrases: {}, // dict where key is playerId, value is their phrase as a string
       cards: [], // all cards dealt this round
@@ -162,11 +180,11 @@ class App extends Component {
     sendMessage(this.ws, message);
   }
 
-  onJoinRequest = (playerName) => {
+  onJoinRequest = (playerName, playerId) => {
     var payload = {
       messageType: 'JoinRequest', 
-      playerName: playerName,
-      // ...(localStorage.getItem("playerId") !== null && {playerId: localStorage.getItem("playerId") })
+      ...(playerName && {playerName: playerName}),
+      ...(playerId && {playerId: playerId}),
     }
     this._sendMessage(payload)
   }
