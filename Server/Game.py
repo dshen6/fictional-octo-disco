@@ -344,7 +344,11 @@ class Game:
         if self.timer > 0:
             payload["timer"] = int(self.timer)
         for clientId in clients:
-            self.send(clientId, "GameStateUpdate", payload)
+            uniquePayload = payload.copy()
+            playerId = self.getPlayerId(clientId)
+            if playerId >= 0:
+                uniquePayload["currentPlayerId"] = playerId
+            self.send(clientId, "GameStateUpdate", uniquePayload)
 
     def sendGlobalPhraseUpdate(self, clients):
         phrases = { }
