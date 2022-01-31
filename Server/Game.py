@@ -117,7 +117,9 @@ class Game:
 
     def planningTick(self, incoming, clients):
         self.handleNewClients(clients)
-        self.handleSpectators(incoming, clients)
+        for newPlayer in self.handleNewPlayers(incoming, clients):
+            self.send(self.getClientId(newPlayer), "PhraseUpdate", {"playerId": newPlayer, "phrase": self.playerData[newPlayer].phrase})
+            self.send(self.getClientId(newPlayer), "DeckDeal", {"playerId": newPlayer, "cards": self.playerData[newPlayer].deck})
 
         # handle card usage
         for msg in incoming:
@@ -197,8 +199,10 @@ class Game:
         return True
 
     def trollingTick(self, incoming, clients):
-        self.handleNewClients(clients)
-        self.handleSpectators(incoming, clients)
+        if self.handleNewClients(clients):
+            self.sendGlobalPhraseUpdate(clients)
+        for newPlayer in self.handleNewPlayers(incoming, clients):
+            self.send(self.getClient(newPlayer), "PlayerTurn", {"playerId": self.playerTurn})
 
         # handle card usage
         for msg in incoming:
@@ -224,7 +228,7 @@ class Game:
                 if success:
                     del playerData.deck[cardIndex]
                     self.send(msg.clientId, "CardConsumed", {"playerId": playerId, "cardIndex": cardIndex})
-                    self.sendGlobalPhraseUpdate()
+                    self.sendGlobalPhraseUpdate(clients)
                     self.nextTrollingTurn(clients, False)
                 else:
                     self.sendUseCardError(playerId, cardIndex)
@@ -249,8 +253,9 @@ class Game:
         self.sendCurrentVotes(clients)
 
     def votingTick(self, incoming, clients):
-        self.handleNewClients(clients)
-        self.handleSpectators(incoming, clients)
+        if self.handleNewClients(clients):
+            self.sendCurrentVotes(clients)
+        self.handleNewPlayers(incoming, clients)
 
         # handle votes
         sendTotals = False
@@ -287,7 +292,7 @@ class Game:
 
     def resultsTick(self, incoming, clients):
         self.handleNewClients(clients)
-        self.handleSpectators(incoming, clients)
+        self.handleNewPlayers(incoming, clients)
 
         #handle timer
         if self.phaseTimeUp:
@@ -304,7 +309,7 @@ class Game:
 
     def summaryTick(self, incoming, clients):
         self.handleNewClients(clients)
-        self.handleSpectators(incoming, clients)
+        self.handleNewPlayers(incoming, clients)
 
         #handle timer
         if self.phaseTimeUp:
@@ -314,7 +319,7 @@ class Game:
         phrase = GameRules.PHRASES[random.randint(0, len(GameRules.PHRASES) - 1)].split(" ")
         for playerId in self.playerData:
             playerData = self.playerData[playerId]
-            playerData.phrase = phrase
+            playerData.phrase = phrase.copy()
             self.send(self.getClientId(playerId), "PhraseUpdate", {"playerId": playerId, "phrase": phrase})
         return phrase
 
@@ -379,15 +384,19 @@ class Game:
         return -1
 
     def handleNewClients(self, clients):
-        sendPlayerList = False
+        sendUpdates = False
         for clientId in clients:
             if not clientId in self.knownClients:
-                sendPlayerList = True
+                sendUpdates = True
         self.knownClients = clients.copy()
-        if sendPlayerList:
+        if sendUpdates:
+            self.sendPhaseUpdate(clients)
             self.sendPlayerList(clients)
+        return sendUpdates
 
-    def handleSpectators(self, incoming, clients):
+
+    def handleNewPlayers(self, incoming, clients):
+        newPlayers = []
         for msg in incoming:
             if msg.messageType == "JoinRequest":
                 if self.getPlayerId(msg.clientId) >= 0:
@@ -403,7 +412,7 @@ class Game:
                                 "isSpectator": False,
                                 "isHost": True # everyone is a host for now
                             })
-                            self.sendPhaseUpdate(clients)
+                            newPlayers.append(player["playerId"])
                             break
                 else:
                     # view as a spectator
@@ -412,4 +421,4 @@ class Game:
                         "isSpectator": True,
                         "isHost": False
                     })
-                    self.sendPhaseUpdate(clients)
+        return newPlayers
