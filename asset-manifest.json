@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/fictional-octo-disco/static/css/main.8b372f1d.css",
-    "main.js": "/fictional-octo-disco/static/js/main.fb668e95.js",
+    "main.css": "/fictional-octo-disco/static/css/main.ca0656ee.css",
+    "main.js": "/fictional-octo-disco/static/js/main.e4a09a07.js",
     "static/media/troll-front.png": "/fictional-octo-disco/static/media/troll-front.f76a9e7bf304a3617333.png",
     "static/media/rhyme-front.png": "/fictional-octo-disco/static/media/rhyme-front.97ee18cc2e146f73d30b.png",
     "static/media/dump-front.png": "/fictional-octo-disco/static/media/dump-front.c9a34aad2e0ca50920c0.png",
@@ -10,11 +10,11 @@
     "static/media/subvert-front.png": "/fictional-octo-disco/static/media/subvert-front.d49af17c2ee5388f32ba.png",
     "static/media/invert-front.png": "/fictional-octo-disco/static/media/invert-front.9fe7fcec7154077e6d84.png",
     "index.html": "/fictional-octo-disco/index.html",
-    "main.8b372f1d.css.map": "/fictional-octo-disco/static/css/main.8b372f1d.css.map",
-    "main.fb668e95.js.map": "/fictional-octo-disco/static/js/main.fb668e95.js.map"
+    "main.ca0656ee.css.map": "/fictional-octo-disco/static/css/main.ca0656ee.css.map",
+    "main.e4a09a07.js.map": "/fictional-octo-disco/static/js/main.e4a09a07.js.map"
   },
   "entrypoints": [
-    "static/css/main.8b372f1d.css",
-    "static/js/main.fb668e95.js"
+    "static/css/main.ca0656ee.css",
+    "static/js/main.e4a09a07.js"
   ]
 }
