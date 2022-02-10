@@ -43,9 +43,9 @@ function PlayerIconRow(props) {
 function PlayerIcon(props) {
   const currentPlayerClassName = props.isCurrentPlayer ? 'current-player' :  ''
   return(
-    <li className='player-list-item'>
+    <li className={`player-list-item ${currentPlayerClassName}`}>
         <div className='player-ready-icon'>👍</div>
-        <h2 className={`player-text ${currentPlayerClassName}`}>{props.playerName}</h2>
+        <h2 className='player-text'>{props.playerName}</h2>
     </li>
   );
 }
