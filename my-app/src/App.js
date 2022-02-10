@@ -27,7 +27,7 @@ function getHost() {
   if (DEBUG) {
     return 'localhost:8080'
   } else {
-    return window.location.host
+    return "fictional-octo-disco.herokuapp.com"
   }
 }
 
