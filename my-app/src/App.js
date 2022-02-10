@@ -54,7 +54,7 @@ function setPlayerIdInLocalStorage(currentPlayerId) {
   }
   const now = Date.now();
   const dateAndCurrentPlayerId = now + ";" + currentPlayerId;
-  localStorage.setItem("mostRecentConfirmedCurrentPlayerId", dateAndCurrentPlayerId)
+  // localStorage.setItem("mostRecentConfirmedCurrentPlayerId", dateAndCurrentPlayerId)
 }
 
 function handleMessage(message) {
