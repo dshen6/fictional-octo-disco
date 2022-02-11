@@ -13,6 +13,9 @@ function LobbyScreen(props) {
 
   return (
     <section className='lobby-container game-page-container'>
+      <span className='instructions'>
+        We are wordsmiths that transform old sayings into better versions. Each player is given a copy of the same phrase, and uses cards to perform specific transformations to their version of the phrase. Then, we vote for which versions are best.
+      </span>
       <h1>Join the game!</h1>
       <PlayerIconRow playerNames={playerNames} currentPlayerName = {currentPlayerName} />
       <ReadyText readyPlayerCount={playerNames.length} playerLimit={playerLimit}/>
