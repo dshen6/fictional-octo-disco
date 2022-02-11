@@ -261,6 +261,7 @@ class App extends Component {
           currentScreenTimer = {state.currentScreenTimer}
           players = {state.players}
           phrases = {state.phrases}
+          cards = {state.cards}
           isSpectator = {state.isSpectator}
           currentPlayerTrollTurnId = {state.currentPlayerTrollTurnId}
           lockedWords = {state.lockedWords}
