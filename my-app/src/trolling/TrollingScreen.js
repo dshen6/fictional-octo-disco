@@ -25,10 +25,9 @@ function TrollingScreen(props) {
         const trolledPlayerWordIndex = selectedPlayerId1 === currentPlayerIdAsString ? selectedWordIndex2 : selectedWordIndex1;
         const isValidSwap = selectedWordIndex1 > -1 && selectedWordIndex2 > -1 && areSelectedPlayersValid;
         const trolledPlayerId = selectedPlayerId1 === currentPlayerIdAsString ? selectedPlayerId2 : selectedPlayerId1;
-        const selectedCardIndex = props.cards.findIndex(el => el === "troll")
         if (isValidSwap && selectedCardIndex > -1) {
             clearSelection()
-            props.onUseCard(selectedCardIndex, currentPlayerWordIndex, trolledPlayerWordIndex, trolledPlayerId, "", "")
+            props.onUseCard(null, currentPlayerWordIndex, trolledPlayerWordIndex, trolledPlayerId, "", "")
         }
     },[selectedPlayerId1, selectedPlayerId2, props, selectedWordIndex1, selectedWordIndex2] );
 
