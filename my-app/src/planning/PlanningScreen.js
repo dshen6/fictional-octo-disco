@@ -62,8 +62,7 @@ function PlanningScreen(props) {
                 setStinkyIndex={setStinkyIndex}
                 selectedCardIndex={selectedCardIndex}
                 onUseCard={props.onUseCard}
-                clearSelection={props.clearSelection}
-                selectedCardIndex={selectedCardIndex}
+                clearSelection={clearSelection}
                 />
             <PlayerCardRow playerCards={props.cards}
                 onSelectedCard={setSelectedCardIndex}

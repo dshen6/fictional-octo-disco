@@ -224,7 +224,7 @@ class Game:
                     self.sendUseCardError(playerId, cardIndex)
                     continue
                 otherPlayerData = self.playerData[otherPlayerId]
-                success = playerData.applyToll(msg.payload["position1"], otherPlayerData, msg.payload["position2"])
+                success = playerData.applyTroll(msg.payload["position1"], otherPlayerData, msg.payload["position2"])
                 if success:
                     del playerData.deck[cardIndex]
                     self.send(msg.clientId, "CardConsumed", {"playerId": playerId, "cardIndex": cardIndex})

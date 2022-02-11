@@ -68,7 +68,7 @@ function handleMessage(message) {
         isHost: msg.isHost,
       })
       if (msg.playerId) {
-        setPlayerIdInLocalStorage(msg.playerId)
+        // this.setPlayerIdInLocalStorage(msg.playerId)
       }
       break;
 
@@ -84,7 +84,7 @@ function handleMessage(message) {
         currentScreenTimer: msg.timer,
       })
       if (msg.currentPlayerId) {
-        setPlayerIdInLocalStorage(msg.currentPlayerId)
+        // this.setPlayerIdInLocalStorage(msg.currentPlayerId)
       }
 
       break;

@@ -9,23 +9,27 @@ function TrollingScreen(props) {
     const [selectedWordIndex2, setSelectedWordIndex2] = useState(-1)
     const [selectedPlayerId1, setSelectedPlayerId1] = useState(-1)
     const [selectedPlayerId2, setSelectedPlayerId2] = useState(-1)
-    // todo: avatars carried over? colors?
-    // todo: walkthrough of cards applied
+
+    const clearSelection = function() {
+        setSelectedPlayerId1(-1)
+        setSelectedPlayerId2(-1)
+        setSelectedWordIndex1(-1)
+        setSelectedWordIndex2(-1)
+    };
+
+    const currentPlayerIdAsString = ""+props.currentPlayerId
 
     useEffect(() => {
-        const areSelectedPlayersValid = selectedPlayerId1 !== selectedPlayerId2 && (selectedPlayerId1 === props.currentPlayerId || selectedPlayerId2 === props.currentPlayerId);
-        const currentPlayerWordIndex = selectedPlayerId1 === props.currentPlayerId ? selectedWordIndex1 : selectedWordIndex2;
-        const trolledPlayerWordIndex = selectedPlayerId1 === props.currentPlayerId ? selectedWordIndex2 : selectedWordIndex1;
+        const areSelectedPlayersValid = selectedPlayerId1 !== selectedPlayerId2 && (selectedPlayerId1 === currentPlayerIdAsString || selectedPlayerId2 === currentPlayerIdAsString);
+        const currentPlayerWordIndex = selectedPlayerId1 === currentPlayerIdAsString ? selectedWordIndex1 : selectedWordIndex2;
+        const trolledPlayerWordIndex = selectedPlayerId1 === currentPlayerIdAsString ? selectedWordIndex2 : selectedWordIndex1;
         const isValidSwap = selectedWordIndex1 > -1 && selectedWordIndex2 > -1 && areSelectedPlayersValid;
-        const trolledPlayerId = selectedPlayerId1 === props.currentPlayerId ? selectedPlayerId2 : selectedPlayerId1;
+        const trolledPlayerId = selectedPlayerId1 === currentPlayerIdAsString ? selectedPlayerId2 : selectedPlayerId1;
         if (isValidSwap) {
-            setSelectedWordIndex1(-1)
-            setSelectedWordIndex2(-1)
-            setSelectedPlayerId1(-1)
-            setSelectedPlayerId2(-1)
+            clearSelection()
             props.onUseCard(props.selectedCardIndex, currentPlayerWordIndex, trolledPlayerWordIndex, trolledPlayerId, "", "")
         }
-    });
+    },[selectedPlayerId1, selectedPlayerId2, props, selectedWordIndex1, selectedWordIndex2] );
 
     const isMyTurnToTroll = props.currentPlayerTrollTurnId === props.currentPlayerId;
     const nameOfTrollingPlayer = props.players[props.currentPlayerTrollTurnId];

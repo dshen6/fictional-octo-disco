@@ -22,7 +22,7 @@ function VotingScreen(props) {
 // List of phrases with vote option
 function PlayerPhraseList(props) {
     const playerPhraseList = Object.entries(props.phrases).map(([playerId, phrase]) => {
-        if (playerId != props.currentPlayerId) {
+        if (playerId !== props.currentPlayerId) {
             return <PlayerPhrase playerPhrase={phrase} key={playerId}
                 playerId={playerId}
                 playerHasVoted={props.playerHasVoted} 
@@ -44,7 +44,7 @@ function PlayerPhraseList(props) {
 
 // Singular phrase
 function PlayerPhrase(props) {
-    let playerVoteButton = props.playerHasVoted ? '' : <input type='button' className='button' value='&hearts;' type='submit' onClick={e=> {
+    let playerVoteButton = props.playerHasVoted ? '' : <input type='button' className='button' value='&hearts;' onClick={e=> {
         props.setPlayerHasVoted(true)
         props.onVote(props.playerId)
     }}/>
