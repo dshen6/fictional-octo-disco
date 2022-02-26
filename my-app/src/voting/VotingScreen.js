@@ -1,4 +1,5 @@
 import './VotingScreen.css';
+import CountdownTimer from '../components/CountdownTimer';
 import { useState } from 'react';
 
 // View
@@ -7,6 +8,7 @@ function VotingScreen(props) {
     
     return (
         <section className='voting-container game-page-container'>
+            <CountdownTimer currentScreenTimer={props.currentScreenTimer}/>
             <h1>Vote on your favorite phrase:</h1>
             <PlayerPhraseList phrases={props.phrases}
             currentPlayerId={props.currentPlayerId}
@@ -22,7 +24,7 @@ function VotingScreen(props) {
 // List of phrases with vote option
 function PlayerPhraseList(props) {
     const playerPhraseList = Object.entries(props.phrases).map(([playerId, phrase]) => {
-        if (playerId !== props.currentPlayerId) {
+        if (parseInt(playerId) !== parseInt(props.currentPlayerId)) {
             return <PlayerPhrase playerPhrase={phrase} key={playerId}
                 playerId={playerId}
                 playerHasVoted={props.playerHasVoted} 

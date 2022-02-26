@@ -272,6 +272,7 @@ class App extends Component {
         pageComponent = 
         <VotingScreen
           currentPlayerId = {state.currentPlayerId}
+          currentScreenTimer = {state.currentScreenTimer}
           players = {state.players}
           phrases = {state.phrases}
           votes = {state.votes}
