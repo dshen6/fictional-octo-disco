@@ -73,7 +73,7 @@ class PlayerData:
             return False
         temp = self.phrase[wordIndex]
         self.phrase[wordIndex] = otherPlayerData.phrase[otherWordIndex]
-        otherPlayerData[otherWordIndex] = temp
+        otherPlayerData.phrase[otherWordIndex] = temp
         self.lockedIndexes.append(wordIndex)
         otherPlayerData.lockedIndexes.append(otherWordIndex)
         return True
