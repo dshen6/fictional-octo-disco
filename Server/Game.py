@@ -223,7 +223,7 @@ class Game:
                 if playerData.deck[cardIndex] != "troll":
                     self.sendUseCardError(playerId, cardIndex)
                     continue
-                otherPlayerId = msg.payload["playerId2"]
+                otherPlayerId = int(msg.payload["playerId2"])
                 if not otherPlayerId in self.playerData:
                     self.sendUseCardError(playerId, cardIndex)
                     continue
