@@ -214,8 +214,8 @@ class Game:
                     continue
                 playerData = self.playerData[playerId]
                 cardIndex = -1
-                for i in range(len(self.playerData.deck)):
-                    if self.playerData.deck[i] == "troll":
+                for i in range(len(playerData.deck)):
+                    if playerData.deck[i] == "troll":
                         cardIndex = i
                         break
                 if cardIndex < 0 or cardIndex >= len(playerData.deck):
