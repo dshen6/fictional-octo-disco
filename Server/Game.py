@@ -213,7 +213,11 @@ class Game:
                 if self.playerTurn != playerId:
                     continue
                 playerData = self.playerData[playerId]
-                cardIndex = msg.payload["cardIndex"]
+                cardIndex = -1
+                for i in range(len(self.playerData.deck)):
+                    if self.playerData.deck[i] == "troll":
+                        cardIndex = i
+                        break
                 if cardIndex < 0 or cardIndex >= len(playerData.deck):
                     continue
                 if playerData.deck[cardIndex] != "troll":
