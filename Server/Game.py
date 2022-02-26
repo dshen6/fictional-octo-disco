@@ -85,7 +85,7 @@ class Game:
                 else:
                     # rejoin after lost connection
                     for player in self.activePlayers:
-                        if player["playerId"] == msg.payload["playerId"]:
+                        if player["playerId"] == int(msg.payload["playerId"]):
                             player["clientId"] = msg.clientId
                             self.send(msg.clientId, "JoinResponse", {
                                 "playerId": player["playerId"],
@@ -110,6 +110,10 @@ class Game:
         self.currentPhase = "planning"
         self.timer = GameRules.PLANNING_PHASE_TIME
         self.sendPhaseUpdate(clients)
+
+        # partial reset
+        for playerId in self.playerData:
+            self.playerData[playerId].partialReset()
 
         # give players their phrase and cards
         phrase = self.distributePhrase()
@@ -268,7 +272,7 @@ class Game:
                 playerId = self.getPlayerId(msg.clientId)
                 if playerId < 0:
                     continue
-                targetPlayerId = msg.payload["playerId"]
+                targetPlayerId = int(msg.payload["playerId"])
                 if not targetPlayerId in self.playerData:
                     continue
                 if targetPlayerId == playerId:
@@ -413,7 +417,7 @@ class Game:
                 elif "playerId" in msg.payload:
                     # rejoin after lost connection
                     for player in self.activePlayers:
-                        if player["playerId"] == msg.payload["playerId"]:
+                        if player["playerId"] == int(msg.payload["playerId"]):
                             player["clientId"] = msg.clientId
                             self.send(msg.clientId, "JoinResponse", {
                                 "playerId": player["playerId"],

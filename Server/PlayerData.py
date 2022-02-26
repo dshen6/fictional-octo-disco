@@ -6,11 +6,18 @@ class PlayerData:
         self.lockedIndexes = []
         self.currentVotes = 0
         self.totalVotes = 0
+        self.lastError = ""
+
+    def partialReset(self):
+        self.lockedIndexes = []
+        self.lastError = ""
 
     def applyGeneric(self, wordIndex, replacement):
         if wordIndex < 0 or wordIndex >= len(self.phrase):
+            self.lastError = "You must type a replacement word!"
             return False
         if replacement == "":
+            self.lastError = ""
             return False
         self.phrase[wordIndex] = replacement.lower()
         return True
