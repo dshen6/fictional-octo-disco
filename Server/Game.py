@@ -195,10 +195,12 @@ class Game:
         if len(possiblePlayers) == 0:
             return False
         self.playerTurn = possiblePlayers[random.randint(0, len(possiblePlayers) - 1)]
+        self.timer = GameRules.TROLLING_TURN_TIME
 
         # notify all clients
         for clientId in clients:
             self.send(clientId, "PlayerTurn", {"playerId": self.playerTurn})
+        self.sendPhaseUpdate(clients)
         
         return True
 
