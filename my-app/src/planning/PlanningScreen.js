@@ -24,6 +24,16 @@ function PlanningScreen(props) {
         setTransformedText("")
     };
 
+    const cardDescriptions = {
+        "rhyme" : "Replace a word with another that rhymes.",
+        "invert" : "Replace a word with one that means the opposite.",
+        "subvert" : "Replace a word with one that begins and ends with the same letters.",
+        "swap" : "Choose two words and swap their positions.", 
+        "pump" : "Replace a word with one that is similar in meaning but more powerful.",
+        "dump" : "Drop a word of your choice.",
+        "troll" : "Choose two words that belong to different players and swap their positions." 
+    }
+
     useEffect(() => {
         // trigger swap
         if (selectedWordIndex1 > -1 && selectedWordIndex2 > -1 && expectTwoSelections) {
@@ -70,6 +80,7 @@ function PlanningScreen(props) {
                 setSelectedWordIndex1={setSelectedWordIndex1}
                 setSelectedWordIndex2={setSelectedWordIndex2}
                 setTransformedText={setTransformedText}
+                cardDescriptions={cardDescriptions}
             />
         </section>
     )
@@ -158,7 +169,7 @@ function CardWordInput(props) {
 // Show list of cards
 function PlayerCardRow(props) {
     const playerCards = props.playerCards.map((card, i) =>
-        <PlayerCard card={card} key={i}
+        <PlayerCard card={card} key={i} cardDescription={props.cardDescriptions[card]}
             onClick={e => {
                 props.onSelectedCard(i);
                 if (props.selectedCardIndex !== -1) {
@@ -171,7 +182,7 @@ function PlayerCardRow(props) {
             isSelected={i === props.selectedCardIndex}/>)
 
     return (
-        <section className='player-card-container'>
+        <section className='player-card-row-container'>
             <h1>Your cards</h1>
             {props.playerCards.includes('troll') && <p>Your troll card(s) will be used in the next stage, after everyone uses all their non-troll cards.</p>}
             <ul className='player-card-row list-unstyled'>
@@ -183,14 +194,26 @@ function PlayerCardRow(props) {
 
 // Singular card
 function PlayerCard(props) {
-    let trollCardStatus = props.card === 'troll' ? 'disabled': null
-    let isSelected = props.isSelected ? 'player-card-selected' : null
+    let trollCardStatus = props.card === 'troll' ? 'disabled': ''
+    let isSelected = props.isSelected ? 'player-card-selected' : ''
+
+    const [isFlipped, flipCard] = useState(false);
+
+    const triggerCardFlip = () => {
+        flipCard( !isFlipped )
+    }
+
     return(
-        <li>
-            <button className={`player-card player-card-${props.card} ${trollCardStatus} ${isSelected}`} onClick={props.onClick}>
+        <li className='player-card-container'>
+            <button className={`player-card player-card-${props.card} ${trollCardStatus} ${isSelected} ${isFlipped ? 'player-card-flipped' : ''}`}
+                    onClick={props.onClick}
+                    data-title={`${props.card.toUpperCase()}`}
+                    data-description={`${props.cardDescription}`}
+                    >
                 <h3 className='player-card-word'>
                 </h3>
             </button>
+            <button className={`button help-button ${isFlipped ? 'help-button-selected' : ''}`} onClick={triggerCardFlip}>?</button>
         </li>
       )
 }
