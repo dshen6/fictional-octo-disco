@@ -15,11 +15,19 @@ class CountdownTimer extends React.Component {
         )
     }
 
+    UNSAFE_componentWillUpdate(nextProps, nextState) {
+        if (nextProps.currentScreenTimer !== this.props.currentScreenTimer) {
+            this.setState({
+                timeLeft: nextProps.currentScreenTimer
+            })
+        }
+    }
+
     tick() {
         this.setState(function(state, props) {
             if (state.timeLeft > 0) {
                 return {
-                timeLeft: state.timeLeft - 1
+                    timeLeft: state.timeLeft - 1
                 }
             } else {
                 clearInterval(this.timerID)
