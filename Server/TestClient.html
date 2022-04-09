@@ -82,25 +82,49 @@
    }
 
 
+
+   ////// game specific testing stiff
+   function sendJoinRequest(name){
+     doSend("{\"messageType\":\"JoinRequest\", \"playerName\":\"" + name + "\"}");
+   }
+
+   function sendStartGame(){
+     doSend("{\"messageType\":\"StartGame\"}");
+   }
+
+   function sendSkipStage()
+   {
+    doSend("{\"messageType\":\"SkipStage\"}");
+   }
+
+
 </script>
 
 <div id="output"></div>
 
 <form name="myform">
 <p>
-<textarea name="outputtext" rows="20" cols="50"></textarea>
+<textarea name="outputtext" rows="30" cols="150"></textarea>
 </p>
 <p>
-<textarea name="inputtext" cols="50"></textarea>
+<textarea name="inputtext" cols="150"></textarea>
 </p>
 <p>
-<textarea name="url" cols="50"></textarea>
+<textarea name="url" cols="150"></textarea>
 </p>
 <p>
 <input type="button" name=sendButton value="Send" onClick="sendText();">
 <input type="button" name=clearButton value="Clear" onClick="clearText();">
 <input type="button" name=disconnectButton value="Disconnect" onClick="doDisconnect();">
 <input type="button" name=connectButton value="Connect" onClick="doConnect();">
+</p>
+
+
+<!-- Game specific testing stuff -->
+<p>
+  <input type="button" value="joinRequest" onClick="sendJoinRequest('Tester');">
+  <input type="button" value="startGame" onClick="sendStartGame();">
+  <input type="button" value="skipStage" onClick="sendSkipStage();">
 </p>
 
 

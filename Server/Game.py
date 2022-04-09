@@ -31,6 +31,11 @@ class Game:
         self.lastTickTime = currentTime
         self.updateTimer(elapsed)
 
+        # handle debug skips
+        for msg in incoming:
+            if msg.messageType == "SkipStage":
+                self.updateTimer(9999)
+
         # send timer updates every 10 seconds
         if currentTime - self.lastTimerBroadcast > 10:
             if self.timer > 0:
