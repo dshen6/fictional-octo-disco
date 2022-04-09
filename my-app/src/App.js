@@ -45,16 +45,9 @@ function sendMessage(ws, message) {
 }
 
 function setPlayerIdInLocalStorage(currentPlayerId) {
-  if (this.state.currentPlayerId === null) { // we lost connection, reconnecting
-    const [mostRecentConfirmTimestampMs, currentPlayerId] = dateAndCurrentPlayerId.split(";")
-    if (Date.now() - mostRecentConfirmTimestampMs < 30 * 1000) { // got a valid game state update, less than 30 seconds ago
-      console.log("here, sending join request")
-      // this.onJoinRequest(null, currentPlayerId)
-    }
-  }
   const now = Date.now();
-  const dateAndCurrentPlayerId = now + ";" + currentPlayerId;
-  // localStorage.setItem("mostRecentConfirmedCurrentPlayerId", dateAndCurrentPlayerId)
+  const timestampAndCurrentPlayerId = now + ";" + currentPlayerId;
+  localStorage.setItem("mostRecentConfirmedCurrentPlayerId", timestampAndCurrentPlayerId)
 }
 
 function handleMessage(message) {
@@ -67,9 +60,6 @@ function handleMessage(message) {
         isSpectator: msg.isSpectator,
         isHost: msg.isHost,
       })
-      if (msg.playerId) {
-        // this.setPlayerIdInLocalStorage(msg.playerId)
-      }
       break;
 
     case "PlayerList":
@@ -83,8 +73,8 @@ function handleMessage(message) {
         currentScreen: msg.state,
         currentScreenTimer: msg.timer,
       })
-      if (msg.currentPlayerId) {
-        // this.setPlayerIdInLocalStorage(msg.currentPlayerId)
+      if (msg.currentPlayerId > -1) {
+        setPlayerIdInLocalStorage(msg.currentPlayerId)
       }
 
       break;
@@ -151,7 +141,7 @@ class App extends Component {
       isSpectator: false, // whether you can do stuff or just watch
       isHost: false, // only used in lobby
       players: {}, // all players
-      currentPlayerId: null, // only set in JoinResponse
+      currentPlayerId: -1, // confirmed by server in GameStateUpdate
       votes: {}, // Voting Screen
       phrases: {}, // dict where key is playerId, value is their phrase as a string
       cards: [], // all cards dealt this round
@@ -173,6 +163,18 @@ class App extends Component {
     }
 
     this.ws = ws
+  }
+
+  componentDidMount() {
+    if (this.state.currentPlayerId < 0) {
+    } else {
+      this.onJoinRequest(null, this.state.currentPlayerId)
+    }
+    const fromLocalStorage = localStorage.getItem("mostRecentConfirmedCurrentPlayerId")
+    const [mostRecentConfirmTimestampMs, playerId] = fromLocalStorage.split(";")
+    if (Date.now() - mostRecentConfirmTimestampMs < 30 * 1000) { // got a valid game state update, less than 30 seconds ago
+      this.onJoinRequest(null, playerId)
+    }
   }
 
   // for convenience
