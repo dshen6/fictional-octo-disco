@@ -57,7 +57,6 @@ function PlanningScreen(props) {
 
     return (
         <section className='planning-container text-align-center'>
-            <CountdownTimer currentScreenTimer={props.currentScreenTimer}/>
             <WordCardRow words={playerPhrase}
                 onSelectedWord1={setSelectedWordIndex1}
                 onSelectedWord2={setSelectedWordIndex2}
@@ -74,6 +73,7 @@ function PlanningScreen(props) {
                 onUseCard={props.onUseCard}
                 clearSelection={clearSelection}
                 />
+            <CountdownTimer currentScreenTimer={props.currentScreenTimer}/>
             <PlayerCardRow playerCards={props.cards}
                 onSelectedCard={setSelectedCardIndex}
                 selectedCardIndex={selectedCardIndex}
