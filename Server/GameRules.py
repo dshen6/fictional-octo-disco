@@ -10,7 +10,6 @@ PHRASES = [
     "a cat has nine lives",
     "slow and steady wins the race",
     "a rolling stone gathers no moss",
-    "a bird in the hand is worth two in the bush",
     "a penny saved is a penny earned",
     "a picture is worth a thousand words",
     "actions speak louder than words",
