@@ -171,9 +171,11 @@ class App extends Component {
       this.onJoinRequest(null, this.state.currentPlayerId)
     }
     const fromLocalStorage = localStorage.getItem("mostRecentConfirmedCurrentPlayerId")
-    const [mostRecentConfirmTimestampMs, playerId] = fromLocalStorage.split(";")
-    if (Date.now() - mostRecentConfirmTimestampMs < 30 * 1000) { // got a valid game state update, less than 30 seconds ago
-      this.onJoinRequest(null, playerId)
+    if (fromLocalStorage != null) {
+      const [mostRecentConfirmTimestampMs, playerId] = fromLocalStorage.split(";")
+      if (Date.now() - mostRecentConfirmTimestampMs < 30 * 1000) { // got a valid game state update, less than 30 seconds ago
+        this.onJoinRequest(null, playerId)
+      }
     }
   }
 
