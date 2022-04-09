@@ -29,7 +29,7 @@ class CountdownTimer extends React.Component {
 
     render() {
         return (
-            <div className='countdown-timer-container'>{this.state.timeLeft}</div>
+            <div className='countdown-timer-container type-handwriting'>&#9203; {this.state.timeLeft}</div>
         )
     }
 }

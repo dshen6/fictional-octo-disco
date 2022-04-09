@@ -111,6 +111,10 @@ h3 {
   display: none;
 }
 
+.countdown-timer-container {
+  font-size: 32px;
+}
+
 @media screen and (min-width: 760px) {
   .list-horizontal {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
