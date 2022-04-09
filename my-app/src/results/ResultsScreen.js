@@ -1,4 +1,5 @@
 import './ResultsScreen.css';
+import CountdownTimer from '../components/CountdownTimer';
 
 // View
 function ResultsScreen(props) {
@@ -30,29 +31,40 @@ function ResultsScreen(props) {
             <section className='results-container text-align-center game-page-container'>
                 <h1>This round's winner is:</h1>
                 <Winner winnerName={winnerName} winningPhrase = {winningPhrase}/>
+                <NextRoundTimer currentScreenTimer={props.currentScreenTimer} />
             </section>
         )
     } else {
         const winners = winningPlayerIds.map(id => {
             const winningPhrase = props.phrases[id].join(' ')
-        return <Winner winnerName={props.players[id]} winningPhrase = {winningPhrase} key={id}/>
+            return <Winner winnerName={props.players[id]} winningPhrase = {winningPhrase} key={id}/>
         })
         return (
             <section className='results-container text-align-center game-page-container'>
                 <h1>This round's winners are:</h1>
                 {winners}
+                <NextRoundTimer currentScreenTimer={props.currentScreenTimer} />
             </section>
         )
     }
 
     // Single Winner
-function Winner(props) {
-    return (
+    function Winner(props) {
+        return (
         <div className='winner-item'>
             <h2>{props.winnerName}</h2>
             <h3 className='type-handwriting'>{props.winningPhrase}</h3>
         </div>
-      );
+        );
+    }
+
+    function NextRoundTimer(props) {
+        return (
+        <div>
+            <span>Next round in:</span>
+            <CountdownTimer currentScreenTimer={props.currentScreenTimer}/>
+        </div>
+        );
     }
 }
 
