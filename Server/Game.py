@@ -151,7 +151,7 @@ class Game:
                         self.send(msg.clientId, "CardConsumed", {"playerId": playerId, "cardIndex": cardIndex})
                         self.send(msg.clientId, "PhraseUpdate", {"playerId": playerId, "phrase": playerData.phrase})
                     else:
-                        self.sendUseCardError(playerId, cardIndex)
+                        self.sendUseCardError(playerId, cardIndex, playerData.lastError)
 
         # handle fast forward
         validCards = 0
@@ -225,23 +225,26 @@ class Game:
                         cardIndex = i
                         break
                 if cardIndex < 0 or cardIndex >= len(playerData.deck):
+                    self.sendUseCardError(playerId, cardIndex, "You don't have a troll card!")
                     continue
                 if playerData.deck[cardIndex] != "troll":
-                    self.sendUseCardError(playerId, cardIndex)
+                    self.sendUseCardError(playerId, cardIndex, "Only troll cards may be used!")
                     continue
-                otherPlayerId = int(msg.payload["playerId2"])
-                if not otherPlayerId in self.playerData:
-                    self.sendUseCardError(playerId, cardIndex)
+                otherPlayerId2 = int(msg.payload["playerId2"])
+                otherPlayerId3 = int(msg.payload["playerId3"])
+                if not otherPlayerId2 in self.playerData or not otherPlayerId3 in self.playerData:
+                    self.sendUseCardError(playerId, cardIndex, "You must troll another player!")
                     continue
-                otherPlayerData = self.playerData[otherPlayerId]
-                success = playerData.applyTroll(msg.payload["position1"], otherPlayerData, msg.payload["position2"])
+                otherPlayerData2 = self.playerData[otherPlayerId2]
+                otherPlayerData3 = self.playerData[otherPlayerId3]
+                success = otherPlayerData2.applyTroll(msg.payload["position1"], otherPlayerData3, msg.payload["position2"])
                 if success:
                     del playerData.deck[cardIndex]
                     self.send(msg.clientId, "CardConsumed", {"playerId": playerId, "cardIndex": cardIndex})
                     self.sendGlobalPhraseUpdate(clients)
                     self.nextTrollingTurn(clients, False)
                 else:
-                    self.sendUseCardError(playerId, cardIndex)
+                    self.sendUseCardError(playerId, cardIndex, playerData.lastError)
 
         # handle timer
         if self.phaseTimeUp:
@@ -377,10 +380,10 @@ class Game:
         for clientId in clients:
             self.send(clientId, "VoteTotals", {"votes": votes})
     
-    def sendUseCardError(self, playerId, cardIndex):
+    def sendUseCardError(self, playerId, cardIndex, description):
         clientId = self.getClientId(playerId)
         if clientId >= 0:
-            self.send(clientId, "UseCardError", {"cardIndex": cardIndex})
+            self.send(clientId, "UseCardError", {"cardIndex": cardIndex, "error":description})
 
     def send(self, clientId, messageType, payload):
         self.outgoingMessages.append(Message(clientId, messageType, payload))
