@@ -1,5 +1,6 @@
 import './TrollingScreen.css';
 import CountdownTimer from '../components/CountdownTimer';
+import ErrorMessage from '../components/ErrorMessage';
 import { useEffect, useState } from 'react';
 
 // View
@@ -41,6 +42,7 @@ function TrollingScreen(props) {
                 <h2>{helperText}</h2>
                 <CountdownTimer currentScreenTimer={props.currentScreenTimer}/>
             </div>
+            <ErrorMessage error={props.useCardError}/>
             <PlayerPhraseList phrases={props.phrases}
                 setSelectedWordIndex1={setSelectedWordIndex1}
                 setSelectedWordIndex2={setSelectedWordIndex2}

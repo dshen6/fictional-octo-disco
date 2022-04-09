@@ -1,5 +1,6 @@
 import './PlanningScreen.css';
 import CountdownTimer from '../components/CountdownTimer';
+import ErrorMessage from '../components/ErrorMessage';
 import { useEffect, useState } from 'react';
 
 function PlanningScreen(props) {
@@ -15,7 +16,6 @@ function PlanningScreen(props) {
     const expectTextInputAfterSingleSelect = ["rhyme", "invert", "subvert", "pump"].includes(props.cards[selectedCardIndex])
     const isDump = props.cards[selectedCardIndex] === "dump" // todo
 
-    // todo: const useCardErrorMessage = 
     const clearSelection = function() {
         setSelectedCardIndex(-1)
         setSelectedWordIndex1(-1)
@@ -64,6 +64,7 @@ function PlanningScreen(props) {
                 onUseCard={props.onUseCard}
                 clearSelection={clearSelection}
                 />
+            <ErrorMessage error={props.useCardError}/>
             <PlayerCardRow playerCards={props.cards}
                 onSelectedCard={setSelectedCardIndex}
                 selectedCardIndex={selectedCardIndex}

@@ -89,16 +89,16 @@ function handleMessage(message) {
 
       break;
     case "PhraseUpdate":
-        // update phrase for just this player
-        const phraseMap = this.state.phrases
-        phraseMap[msg.playerId] = msg.phrase
-        this.setState({
-          phrases: phraseMap
-        })
+      // update phrase for just this player
+      const phraseMap = this.state.phrases
+      phraseMap[msg.playerId] = msg.phrase
+      this.setState({
+        phrases: phraseMap
+      })
       break;
     case "UseCardError":
       this.setState({
-        useCardError: msg.cardIndex
+        useCardError: msg.error
       })
       break;
     case "CardConsumed":
@@ -106,7 +106,7 @@ function handleMessage(message) {
         this.state.cards.splice(msg.cardIndex, 1)
         this.setState({
           cards: this.state.cards,
-          useCardError: -1
+          useCardError: ""
         })
       }
       break;
@@ -157,7 +157,7 @@ class App extends Component {
       cards: [], // all cards dealt this round
       currentPlayerTrollTurnId: -1, // whose turn it is to troll, during trolling
       lockedWords: {}, // dict where key is playerId, value is array of word indices 
-      useCardError: -1, // index of card that was used incorrectly, -1 if none
+      useCardError: "", // error message if a card was incorrectly used
     };
 
     const ws = new ReconnectingWebsocket(`${getWsProtocol()}${getHost()}/socket`);
@@ -252,7 +252,8 @@ class App extends Component {
           cards = {state.cards}
           isSpectator = {state.isSpectator}
           useCardError = {state.useCardError}
-          onUseCard = {this.onUseCard} />
+          onUseCard = {this.onUseCard}
+        />
         break;
       
       case SCREENS.Trolling:

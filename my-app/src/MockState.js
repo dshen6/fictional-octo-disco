@@ -1,5 +1,5 @@
 export default {
-    currentScreen: 'trolling',
+    currentScreen: 'planning',
     currentScreenTimer: 100,
     isSpectator: false, // whether you can do stuff or just watch
     isHost: true, // only used in lobby
@@ -19,5 +19,5 @@ export default {
     cards: ["troll", "swap", "subvert", "swap"], // all cards dealt this round
     currentPlayerTrollTurnId: "0", // whose turn it is to troll, during trolling
     lockedWords: { "0": [1, 2, 3] }, // dict where key is playerId, value is array of word indices 
-    useCardError: 1 // index of card that was used incorrectly, -1 if none
+    useCardError: "you are cool!!" // error message if a card was incorrectly used
 }
