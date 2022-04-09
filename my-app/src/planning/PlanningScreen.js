@@ -28,18 +28,18 @@ function PlanningScreen(props) {
         // trigger swap
         if (selectedWordIndex1 > -1 && selectedWordIndex2 > -1 && expectTwoSelections) {
             clearSelection()
-            props.onUseCard(selectedCardIndex, selectedWordIndex1, selectedWordIndex2, -1, "", "")
+            props.onUseCard(selectedCardIndex, selectedWordIndex1, selectedWordIndex2, -1, -1, "", "")
             return
         }
         // trigger dump
         if (isDump) {
             if (selectedWordIndex1 > -1) {
                 clearSelection()
-                props.onUseCard(selectedCardIndex, selectedWordIndex1, -1, -1, "", "delete")
+                props.onUseCard(selectedCardIndex, selectedWordIndex1, -1, -1, -1, "", "delete")
                 return
             } else if (stinkyIndex > -1) {
                 clearSelection()
-                props.onUseCard(selectedCardIndex, stinkyIndex, -1, -1, "", "stinky")
+                props.onUseCard(selectedCardIndex, stinkyIndex, -1, -1, -1,"", "stinky")
                 return
             }
         }
@@ -97,7 +97,7 @@ function WordCardRow(props) {
             onTextChange = {props.setTransformedText}
             transformedText = {props.transformedText}
             onSubmit = {_ => {
-                props.onUseCard(props.selectedCardIndex, props.selectedWordIndex1, -1, -1, props.transformedText, "")
+                props.onUseCard(props.selectedCardIndex, props.selectedWordIndex1, -1, -1, -1, props.transformedText, "")
                 props.clearSelection()
             }}
         />}

@@ -17,17 +17,14 @@ function TrollingScreen(props) {
         setSelectedWordIndex2(-1)
     };
 
-    const currentPlayerIdAsString = ""+props.currentPlayerId
-
     useEffect(() => {
-        const areSelectedPlayersValid = selectedPlayerId1 !== selectedPlayerId2 && (selectedPlayerId1 === currentPlayerIdAsString || selectedPlayerId2 === currentPlayerIdAsString);
-        const currentPlayerWordIndex = selectedPlayerId1 === currentPlayerIdAsString ? selectedWordIndex1 : selectedWordIndex2;
-        const trolledPlayerWordIndex = selectedPlayerId1 === currentPlayerIdAsString ? selectedWordIndex2 : selectedWordIndex1;
-        const isValidSwap = selectedWordIndex1 > -1 && selectedWordIndex2 > -1 && areSelectedPlayersValid;
-        const trolledPlayerId = selectedPlayerId1 === currentPlayerIdAsString ? selectedPlayerId2 : selectedPlayerId1;
+        const areSelectedPlayersDifferent = selectedPlayerId1 !== selectedPlayerId2;
+        const isValidSwap = selectedWordIndex1 > -1 && selectedWordIndex2 > -1 && areSelectedPlayersDifferent;
         if (isValidSwap) {
             clearSelection()
-            props.onUseCard(null, currentPlayerWordIndex, trolledPlayerWordIndex, trolledPlayerId, "", "")
+            props.onUseCard(null, selectedWordIndex1, selectedWordIndex2, selectedPlayerId1, selectedPlayerId2, "", "")
+        } else if (selectedPlayerId1 === selectedPlayerId2 && selectedPlayerId1 > -1) {
+            clearSelection() // reset selection so they can try again
         }
     },[selectedPlayerId1, selectedPlayerId2, props, selectedWordIndex1, selectedWordIndex2] );
 

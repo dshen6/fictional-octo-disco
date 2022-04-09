@@ -193,7 +193,7 @@ class App extends Component {
     this._sendMessage({ messageType: 'StartGame' })
   }
 
-  onUseCard = (cardIndex, position1, position2, playerId2, wordText, mode) => {
+  onUseCard = (cardIndex, position1, position2, playerId2, playerId3, wordText, mode) => {
     var payload = {
       messageType: 'UseCard',
       cardIndex: cardIndex,
@@ -202,6 +202,7 @@ class App extends Component {
     payload = {...payload,
       ...(position2 > -1 && {position2: position2}),
       ...(playerId2 > -1 && {playerId2: playerId2}),
+      ...(playerId3 > -1 && {playerId3: playerId3}),
       ...(wordText.length > 0 && {wordText: wordText}),
       ...(mode && {mode: mode}) // 'delete' or 'stinky'
       }
