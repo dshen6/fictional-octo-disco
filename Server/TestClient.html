@@ -122,10 +122,19 @@
 
 <!-- Game specific testing stuff -->
 <p>
-  <input type="button" value="joinRequest" onClick="sendJoinRequest('Tester');">
-  <input type="button" value="startGame" onClick="sendStartGame();">
-  <input type="button" value="skipStage" onClick="sendSkipStage();">
+  <h3>JoinRequest</h3>
+  <input type="text" id="join-playerName" value="Tester">
+  <input type="button" value="JoinRequest" onClick="sendJoinRequest(document.getElementById('join-playerName').value);">
 </p>
+<p>
+  <h3>StartGame</h3>
+  <input type="button" value="StartGame" onClick="sendStartGame();">
+</p>
+<p>
+  <h3>SkipStage</h3>
+  <input type="button" value="SkipStage" onClick="sendSkipStage();">
+</p>
+
 
 
 </form>

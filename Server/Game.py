@@ -177,8 +177,6 @@ class Game:
 
         # switch to the trolling phase
         self.currentPhase = "trolling"
-        self.timer = GameRules.TROLLING_TURN_TIME
-        self.sendPhaseUpdate(clients)
 
         # next turn (or skip to voting)
         isTrolling = self.nextTrollingTurn(clients, False)
@@ -203,9 +201,9 @@ class Game:
         self.timer = GameRules.TROLLING_TURN_TIME
 
         # notify all clients
+        self.sendPhaseUpdate(clients)
         for clientId in clients:
             self.send(clientId, "PlayerTurn", {"playerId": self.playerTurn})
-        self.sendPhaseUpdate(clients)
         
         return True
 
@@ -254,9 +252,7 @@ class Game:
         # handle timer
         if self.phaseTimeUp:
             isTrolling = self.nextTrollingTurn(clients, True)
-            if isTrolling:
-                self.timer = GameRules.TROLLING_TURN_TIME
-            else:
+            if not isTrolling:
                 self.setupVoting(clients)
 
     def setupVoting(self, clients):
