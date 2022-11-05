@@ -1,4 +1,5 @@
 import React from 'react';
+import timerIcon from '../assets/hourglass.svg';
 
 class CountdownTimer extends React.Component {
     constructor(props) {
@@ -37,7 +38,10 @@ class CountdownTimer extends React.Component {
 
     render() {
         return (
-            <div className='countdown-timer-container type-handwriting'>&#9203; {this.state.timeLeft}</div>
+            <div className='countdown-timer-container type-handwriting'>
+                <img src={timerIcon} className='timer-icon'/>
+                {this.state.timeLeft}
+            </div>
         )
     }
 }
